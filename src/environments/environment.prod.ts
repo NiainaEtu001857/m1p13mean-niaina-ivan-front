@@ -1,6 +1,6 @@
 
 
 export const environment = {
-  api:'https://mellow-essence-production.up.railway.app',
+  api:'https://railway-production-2b78.up.railway.app',
   production: true
 };
