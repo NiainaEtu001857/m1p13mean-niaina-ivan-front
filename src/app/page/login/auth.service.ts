@@ -58,6 +58,7 @@ export class AuthService {
             { email, password }
           )
         );
+
       } else if (role === 'shop') {
         response = await firstValueFrom(
           this.http.post<{ token?: string; user?: User }>(
@@ -77,6 +78,10 @@ export class AuthService {
       localStorage.setItem('token', response.token);
       console.log(localStorage.getItem('token'));
       localStorage.setItem('user', JSON.stringify(response.user));
+      localStorage.setItem("id" , response.user.id);
+      console.log(localStorage.getItem("id"));
+      
+
       this.currentUserSubject.next(response.user);
 
     } catch (error: unknown) {

@@ -1,0 +1,65 @@
+/* Modal semi-transparent en fond */
+.cart-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.3);
+  display: flex;
+  justify-content: flex-end; /* Panier à droite */
+  z-index: 1050;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+/* Contenu du panier */
+.cart-content {
+  background: #fff;
+  width: 350px;
+  max-height: 90%;
+  display: flex;
+  flex-direction: column;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* Header */
+.cart-header {
+  padding: 1rem;
+  border-bottom: 1px solid #eee;
+  font-weight: bold;
+}
+
+/* Close button */
+.btn-close {
+  background: transparent;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+/* Body */
+.cart-body {
+  padding: 0.5rem 1rem;
+  overflow-y: auto;
+  flex-grow: 1;
+}
+
+/* Chaque item */
+.cart-item {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #f1f1f1;
+}
+
+/* Footer */
+.cart-footer {
+  padding: 0.5rem 1rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+/* Boutons */
+.cart-content .btn {
+  border-radius: 8px;
+}
