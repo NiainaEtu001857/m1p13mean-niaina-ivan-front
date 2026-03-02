@@ -15,39 +15,6 @@ import { environment } from '../../../environments/environment';
 export class ClientLayoutComponent {
 
   constructor(private authService: AuthService, private http: HttpClient , private router: Router) {}
-
-  cart: any[] = [];
-  showCart = false;
-
-  toggleCart() {
-    this.showCart = !this.showCart;
-  }
-
-  addToCart(service: any, quantity: number = 1) {
-    const existing = this.cart.find(item => item.service._id === service._id);
-    if (existing) {
-      existing.quantity += quantity;
-      existing.subtotal = existing.quantity * existing.unit_price;
-    } else {
-      this.cart.push({
-        service,
-        quantity,
-        unit_price: service.price,
-        subtotal: quantity * service.price
-      });
-    }
-  }
-
-  totalPrice() {
-    return this.cart.reduce((acc, item) => acc + item.subtotal, 0);
-  }
-  trackById(index: number, item: any) {
-    return item.service._id;
-  }
-
-  checkout() {
-    console.log('Panier envoyé:', this.cart);
-  }
   
   async onLogout() {
     try {

@@ -1,0 +1,154 @@
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-12">
+            <div class="header">
+                <div class="header-body">
+                    <div class="row align-items-center">
+                    <div class="col">
+
+                        <!-- Pretitle -->
+                        <h6 class="header-pretitle">
+                        Overview
+                        </h6>
+
+                        <!-- Title -->
+                        <h1 class="header-title">
+                        Orders
+                        </h1>
+
+                    </div>
+                    <div class="col-auto">
+
+                        <!-- Button -->
+                        <a [routerLink]="['/client']" class="btn btn-primary lift">
+                        New order
+                        </a>
+
+                    </div>
+                    </div>
+                    <div class="row align-items-center">
+                    <div class="col">
+
+                        <!-- Nav -->
+                        <ul class="nav nav-tabs nav-overflow header-tabs">
+                        <li class="nav-item">
+                            <a 
+                            class="nav-link active"
+                            [class.active]="selectedStatus === 'pending'" 
+                            (click)="loadOrders('pending')">
+                            Pending <span class="badge rounded-pill text-bg-secondary-subtle"></span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a 
+                            class="nav-link" 
+                            [class.active]="selectedStatus === ''" 
+                            (click)="loadOrders('')">
+                            Delivered <span class="badge rounded-pill text-bg-secondary-subtle"></span>
+                            </a>
+                        </li>
+                        </ul>
+
+                    </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card" data-list='{"valueNames": ["orders-order", "orders-date", "orders-total", "orders-status", "orders-method"]}'>
+                <div class="table-responsive">
+                    <table class="table table-sm table-nowrap card-table">
+                        <thead>
+                            <tr>
+                                <th>
+
+                                    <!-- Checkbox -->
+                                    <div class="form-check mb-n2">
+                                    <input class="form-check-input list-checkbox-all" name="ordersSelect" id="ordersSelectAll" type="checkbox">
+                                    <label class="form-check-label" for="ordersSelectAll">&nbsp;</label>
+                                    </div>
+
+                                </th>
+                                <th>
+                                    <a href="#" class="text-body-secondary list-sort" data-sort="orders-product">
+                                        Total
+                                    </a>
+                                </th>
+                                <th>
+                                    <a href="#" class="text-body-secondary list-sort" data-sort="orders-date">
+                                    Date
+                                    </a>
+                                </th>
+                                <th>
+                                    <a href="#" class="text-body-secondary list-sort" data-sort="orders-total">
+                                    Total
+                                    </a>
+                                </th>
+                                <th>
+                                    <a href="#" class="text-body-secondary list-sort" data-sort="orders-status">
+                                    Status
+                                    </a>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="list">
+                             <tr *ngFor="let order of orders; let i = index">
+                                <td>{{ i + 1 }}</td>
+                                <td>{{ order.ref }}</td>
+                                <td>{{ order.createdAt | date: 'medium' }}</td>
+                                <td>{{ order.totalAmount | currency }}</td>
+                                <td>{{ order.status }}</td>
+                                <td>
+                                <button
+                                    class="btn btn-sm btn-info"
+                                    (click)="openDetail(order)"
+                                >
+                                    Détail
+                                </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div
+                class="modal fade show"
+                tabindex="-1"
+                [ngStyle]="{ display: showModal ? 'block' : 'none', background: 'rgba(0,0,0,0.5)' }"
+                >
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Détails de la commande {{ selectedOrder?.ref }}</h5>
+                        <button type="button" class="btn-close" (click)="closeModal()"></button>
+                    </div>
+                    <div class="modal-body" *ngIf="selectedOrder">
+                        <div *ngFor="let shop of selectedOrder.shops" class="mb-3">
+                        <h6>Shop ID: {{ shopDetail.name }} / Type : {{ shopDetail.type }} </h6>
+                        <table class="table table-sm table-bordered">
+                            <thead>
+                            <tr>
+                                <th>Nom</th>
+                                <th>Quantité</th>
+                                <th>Prix Unitaire</th>
+                                <th>Total</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr *ngFor="let item of shop.items">
+                                <td>{{ item.serviceName }}</td>
+                                <td>{{ item.quantity }}</td>
+                                <td>{{ item.unitPrice | currency }}</td>
+                                <td>{{ item.totalPrice | currency }}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" (click)="closeModal()">Fermer</button>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

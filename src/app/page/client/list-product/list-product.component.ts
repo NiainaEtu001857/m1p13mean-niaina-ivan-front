@@ -3,26 +3,26 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  EventEmitter,
-  OnInit,
-  Output,
+  OnInit
 } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { CommonModule, formatNumber } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
+import { CartComponent } from "../cart/cart.component";
+import { CartService } from '../../../services/cart.service';
+import { OrderDetail } from '../../../interface/order.interface';
 
 @Component({
   selector: 'app-list-product',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, CartComponent],
   templateUrl: './list-product.component.html',
   styleUrls: ['./list-product.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ListProductComponent implements OnInit {
-  @Output() addToCartEvent = new EventEmitter<any>();
 
   shop: any = null;
   currentShopId: string | null = null;
@@ -32,10 +32,17 @@ export class ListProductComponent implements OnInit {
   totalPages: number = 0;
   private readonly fallbackServiceImage = 'assets/img/logo.svg';
 
+  selectedService: any = null;
+  quantityToAdd: number = 1;
+  showQuantityModal: boolean = false;
+
+  orderDetail!: OrderDetail;
+
   constructor(
     private route: ActivatedRoute,
     private cdr: ChangeDetectorRef,
-    private http: HttpClient
+    private http: HttpClient,
+    private cartService: CartService  
   ) {}
 
   async ngOnInit(): Promise<void> {
@@ -83,22 +90,10 @@ export class ListProductComponent implements OnInit {
   }
 
   private extractServices(response: any): any[] {
-    if (Array.isArray(response)) {
-      return response;
-    }
-
-    if (Array.isArray(response?.services)) {
-      return response.services;
-    }
-
-    if (Array.isArray(response?.data)) {
-      return response.data;
-    }
-
-    if (response?.service && typeof response.service === 'object') {
-      return [response.service];
-    }
-
+    if (Array.isArray(response)) return response;
+    if (Array.isArray(response?.services)) return response.services;
+    if (Array.isArray(response?.data)) return response.data;
+    if (response?.service && typeof response.service === 'object') return [response.service];
     return [];
   }
 
@@ -115,9 +110,23 @@ export class ListProductComponent implements OnInit {
       this.loadServices(this.currentShopId);
     }
   }
-
-  addToCart(service: any) {
-    this.addToCartEvent.emit(service);
+  addToCart() {
+    if (!this.shop){
+      console.error('Aucun shop sélectionné pour ajouter le service au panier');
+      return;
+    }
+   this.orderDetail = {
+    quantity: this.quantityToAdd,
+    serviceName :this.selectedService.name,
+    unitPrice: this.selectedService.sale_price,
+    totalPrice: this.selectedService.sale_price * this.quantityToAdd,
+    service: this.selectedService._id
+   };
+   let idShop = this.shop._id.toString();
+   console.log(idShop);
+   
+    this.cartService.addToCartShop(idShop , this.orderDetail);
+    this.showQuantityModal = false;
   }
 
   resolveServicePhoto(photo: string | null | undefined): string {
@@ -147,5 +156,13 @@ export class ListProductComponent implements OnInit {
       return;
     }
     element.src = this.fallbackServiceImage;
+  }
+  openQuantityModal(service: any) {
+    this.selectedService = service;
+    this.quantityToAdd = service.min_quantity;
+    this.showQuantityModal = true;
+  }
+  closeQuantityModal() {
+    this.showQuantityModal = false;
   }
 }

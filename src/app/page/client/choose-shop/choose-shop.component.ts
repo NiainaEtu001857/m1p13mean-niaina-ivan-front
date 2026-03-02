@@ -11,11 +11,12 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { environment } from '../../../../environments/environment';
+import { CartComponent } from "../cart/cart.component";
 
 @Component({
   selector: 'app-choose-shop',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, CartComponent],
   templateUrl: './choose-shop.component.html',
   styleUrls: ['./choose-shop.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -35,6 +36,8 @@ export class ChooseShopComponent implements OnInit {
   ) {}
 
   async ngOnInit(): Promise<void> {
+    console.log(localStorage.getItem('token'));
+    
     await this.loadShops();
   }
 

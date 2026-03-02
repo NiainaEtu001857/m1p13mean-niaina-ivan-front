@@ -130,6 +130,12 @@ export const routes: Routes = [
                 loadComponent() {
                     return import('./page/client/list-product/list-product.component').then(m => m.ListProductComponent);
                 }
+            },
+            {
+                path: 'order/pending',
+                loadComponent() {
+                    return import('./page/client/order-pending/order-pending.component').then(m => m.OrderPendingComponent);
+                }
             }
         ]
     },
