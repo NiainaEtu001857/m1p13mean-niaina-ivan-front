@@ -29,12 +29,12 @@ export class Login {
 
     switch (type) {
       case 'SHOP':
-        this.email = 'shop@gmail.com';
-        this.password = 'shop'
+        this.email = 'contact@supermarketplus.com';
+        this.password = 'supersecure123'
         break;
       case 'CLIENT':
         this.email = 'john@gmail.com';
-        this.password = '123456';
+        this.password = 'john';
         break
       default:
         this.email = 'admin@gmail.com';
