@@ -48,6 +48,29 @@ export class AuthService {
     }
   }
 
+  async registerShop(shopData: FormData): Promise<void> {
+    try {
+
+        const response = await firstValueFrom(
+        this.http.post<{ token?: string; user?: User }>(
+         `${environment.api}/shop/create`, 
+          shopData
+        )
+      );
+
+      if (!response.token || !response.user) {
+        throw new Error('Réponse invalide du serveur');
+      }
+
+        localStorage.setItem('token', response.token);
+        localStorage.setItem('user', JSON.stringify(response.user));
+        this.currentUserSubject.next(response.user);
+      console.log(response);    
+    } catch (error: unknown) {
+      this.handleHttpError(error);
+    }
+  } 
+
 
   async login(email: string, password: string, role: 'CLIENT' | 'SHOP' | 'ADMIN'): Promise<void> {
     try {
@@ -102,28 +125,6 @@ export class AuthService {
     }
   }
 
-  async registerShop(shopData: FormData): Promise<void> {
-    try {
-
-        const response = await firstValueFrom(
-        this.http.post<{ token?: string; user?: User }>(
-         `${environment.api}/shop/create`, 
-          shopData
-        )
-      );
-
-      if (!response.token || !response.user) {
-        throw new Error('Réponse invalide du serveur');
-      }
-
-        localStorage.setItem('token', response.token);
-        localStorage.setItem('user', JSON.stringify(response.user));
-        this.currentUserSubject.next(response.user);
-      console.log(response);    
-    } catch (error: unknown) {
-      this.handleHttpError(error);
-    }
-  } 
 
   logout() {
     localStorage.removeItem('token');

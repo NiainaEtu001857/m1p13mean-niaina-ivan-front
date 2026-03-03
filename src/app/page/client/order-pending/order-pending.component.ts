@@ -34,6 +34,7 @@ export class OrderPendingComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     await this.loadOrders(this.selectedStatus);
+    this.cdr.markForCheck();
   }
 
   async loadOrders(status: 'pending' | '') {
@@ -44,7 +45,6 @@ export class OrderPendingComponent implements OnInit {
     } else if (status === '') {
       this.orders = await firstValueFrom(this.orderService.getClientOrderHistory());
     }
-    this.cdr.markForCheck();
   }
 
   async openDetail(order: any) {

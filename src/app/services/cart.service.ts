@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, firstValueFrom } from 'rxjs';
+import { BehaviorSubject, firstValueFrom, Observable } from 'rxjs';
 import { OrderDetail, ShopOrder } from '../interface/order.interface';
 import { Shop } from '../interface/shops.interface';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -98,6 +98,23 @@ export class CartService {
     }
     console.log(this.shopsDetail);
     
+  }
+
+  async VerifyStockAndServiceAvailability(item: any): Promise<any> {
+    try {
+      const token = localStorage.getItem('token');
+      const headers = new HttpHeaders({
+        Authorization: `Bearer ${token ?? ''}`
+      });
+      const response = await firstValueFrom(
+        this.http.post(`${environment.api}/orders/verify-stock`, { item }, { headers })
+      );
+      console.log('Stock verification response:', response);
+      return response;
+    } catch (error) {
+      console.error('Error verifying stock:', error);
+      throw error;
+    }
   }
 
   clear() {

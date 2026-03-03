@@ -110,7 +110,7 @@ export class ListProductComponent implements OnInit {
       this.loadServices(this.currentShopId);
     }
   }
-  addToCart() {
+  async addToCart() {
     if (!this.shop){
       console.error('Aucun shop sélectionné pour ajouter le service au panier');
       return;
@@ -122,11 +122,18 @@ export class ListProductComponent implements OnInit {
     totalPrice: this.selectedService.sale_price * this.quantityToAdd,
     service: this.selectedService._id
    };
-   let idShop = this.shop._id.toString();
-   console.log(idShop);
-   
-    this.cartService.addToCartShop(idShop , this.orderDetail);
-    this.showQuantityModal = false;
+    const verificationResult = await this.cartService.VerifyStockAndServiceAvailability(this.orderDetail);
+    if (verificationResult.available) {
+      let idShop = this.shop._id.toString();
+      console.log(idShop);
+      
+        this.cartService.addToCartShop(idShop , this.orderDetail);
+        this.showQuantityModal = false;
+    } else if (verificationResult.error) {
+      alert(verificationResult.error);
+    } else {
+      alert('Le service n\'est pas disponible en quantité suffisante.');
+    }
   }
 
   resolveServicePhoto(photo: string | null | undefined): string {

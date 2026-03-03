@@ -64,8 +64,5 @@ export class OrderService {
 
     return this.http.get<any>(`${this.API}/orders/client`, { params });
   }
-
-  
-
   
 }
