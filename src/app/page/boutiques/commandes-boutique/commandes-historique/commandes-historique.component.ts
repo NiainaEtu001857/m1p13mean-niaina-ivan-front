@@ -39,6 +39,8 @@ export class CommandesHistoriqueComponent implements OnInit {
   statusFilter: string = '';
   orders: Order[] = [];
   filteredOrders: Order[] = [];
+  selectedOrder: Order | null = null;
+  showModal = false;
   clientsById: Record<string, Client> = {};
   shopId: string = '';
   isLoading = false;
@@ -122,12 +124,29 @@ export class CommandesHistoriqueComponent implements OnInit {
   deleteOrder(orderId: string) {
     if (confirm('Voulez-vous supprimer cette commande ?')) {
       this.orders = this.orders.filter((order) => order._id !== orderId);
+      if (this.selectedOrder?._id === orderId) {
+        this.closeModal();
+      }
       this.applyFilters();
     }
   }
 
-  viewOrder(order: Order) {
-    console.log('Commande :', order);
+  viewOrder(order: Order): void {
+    this.openDetail(order);
+  }
+
+  closeOrderDetails(): void {
+    this.closeModal();
+  }
+
+  openDetail(order: Order): void {
+    this.selectedOrder = order;
+    this.showModal = true;
+  }
+
+  closeModal(): void {
+    this.selectedOrder = null;
+    this.showModal = false;
   }
 
   previousPage(): void {
