@@ -1,6 +1,26 @@
 <div data-bs-theme="dark">
         <div class="header pb-5">
           <div class="container-fluid">
+
+            <!-- Body -->
+            <div class="header-body">
+              <div class="row align-items-end">
+                <div class="col">
+
+                  <!-- Pretitle -->
+                  <h6 class="header-pretitle">
+                    Mensuelle
+                  </h6>
+
+                  <!-- Title -->
+                  <h1 class="header-title">
+                    Chiffre d'affaires et ventes
+                  </h1>
+
+                </div>
+              </div><!-- / .row -->
+            </div> <!-- / .header-body -->
+
             <!-- Footer -->
             <div class="header-footer">
 
@@ -29,20 +49,19 @@
                     <div class="col">
                         <!-- Title -->
                         <h6 class="text-uppercase text-body-secondary mb-2">
-                        Number of products or services
+                        Nombre de produits ou services
                         </h6>
 
                         <!-- Heading -->
                         <span class="h2 mb-0">
-                        2
+                        {{dashboardData?.totalServices}}
                         </span>
 
                     </div>
                     <div class="col-auto">
 
-                        <!-- Icon -->
-                        <span class="h2 fe fe-package text-body-secondary mb-0"></span>
-
+                      <!-- Icon -->
+                      <span class="h2 fe fe-briefcase text-body-secondary mb-0"></span>
                     </div>
                 </div> <!-- / .row -->  
               </div>
@@ -59,19 +78,19 @@
 
                     <!-- Title -->
                     <h6 class="text-uppercase text-body-secondary mb-2">
-                        Number of purchases
+                        Nombre d' achat
                     </h6>
 
                     <!-- Heading -->
                     <span class="h2 mb-0">
-                      4
+                      {{dashboardData?.totalAchat}}
                     </span>
 
                   </div>
                   <div class="col-auto">
 
                     <!-- Icon -->
-                    <span class="h2 fe fe-briefcase text-body-secondary mb-0"></span>
+                    <span class="h2 fe fe-shopping-cart text-body-secondary mb-0"></span>
 
                   </div>
                 </div> <!-- / .row -->
@@ -97,7 +116,7 @@
 
                         <!-- Heading -->
                         <span class="h2 me-2 mb-0">
-                           € 12000 
+                          {{ dashboardData?.totalRevenue }} € 
                         </span>
 
                       </div>
@@ -124,19 +143,19 @@
 
                     <!-- Title -->
                     <h6 class="text-uppercase text-body-secondary mb-2">
-                       Number of orders
+                        Nombre de commandes
                     </h6>
 
                     <!-- Heading -->
                     <span class="h2 mb-0">
-                      763.5
+                      {{dashboardData?.totalOrders}}
                     </span>
 
                   </div>
                   <div class="col-auto">
 
                     <!-- Icon -->
-                    <span class="h2 fe fe-briefcase text-body-secondary mb-0"></span>
+                    <span class="h2 fe fe-clipboard text-body-secondary mb-0"></span>
 
                   </div>
                 </div> <!-- / .row -->
@@ -152,10 +171,12 @@
               <div class="card-header">
 
                 <!-- Title -->
-                <h4 class="card-header-title">
-                    The most recent orders
-                </h4>
-                
+                 <a href="" class="text-decoration-none stretched-link" [routerLink]="['/boutiques/commandes/historique']">
+                  <h4 class="card-header-title">
+                      Les commandes récentes
+                  </h4>
+                 </a>
+
 
               </div>
               <div class="table-responsive mb-0" data-list='{"valueNames": ["products-product", "products-stock", "products-price", "products-sales"]}' id="productsList">
@@ -163,64 +184,39 @@
                   <thead>
                     <tr>
                       <th>
+                        <a href="#" class="text-body-secondary list-sort" data-sort="products-stock">
+                          client
+                        </a>
+                      </th>
+                      <th>
                         <a href="#" class="text-body-secondary list-sort" data-sort="products-product">
                           Reference
                         </a>
                       </th>
                       <th>
-                        <a href="#" class="text-body-secondary list-sort" data-sort="products-stock">
-                          Client
-                        </a>
-                      </th>
-                      <th>
                         <a href="#" class="text-body-secondary list-sort" data-sort="products-price">
-                          Price
+                          Prix
                         </a>
                       </th>
                       <th colspan="2">
                         <a href="#" class="text-body-secondary list-sort" data-sort="products-sales">
-                          Status
+                          Date
                         </a>
                       </th>
                     </tr>
                   </thead>
-                  <tbody class="list">
-                    <tr>
-                      <td class="order-reference">
-                        <div class="d-flex align-items-center">
-
-                            <!-- Heading -->
-                            <h4 class="fw-normal mb-1">Sketchpad</h4>
-
-                        </div>
-                      </td>
-                      <td class="order-client">
-
-                      </td>
-                      <td class="order-price">
-                        €14.99
-                      </td>
-                      <td class="order-status">
-                        <span class="badge text-bg-success-subtle">Pending</span>
-                        
-                      </td>
-                    </tr>
+                  <tbody *ngFor="let order of dashboardData?.listOrdersRecent" class="list">
+    
                     <tr>
                       <td class="products-product">
                         <div class="d-flex align-items-center">
-
-                          <!-- Image -->
-                          <div class="avatar">
-                            <img class="avatar-img rounded me-3" src="assets/img/avatars/products/product-2.jpg" alt="...">
-                          </div>
-
                           <div class="ms-3">
 
                             <!-- Heading -->
-                            <h4 class="fw-normal mb-1">Turtleshell Shades</h4>
+                            <h4 class="fw-normal mb-1">{{ order.client.first_name }} {{ order.client.last_name }}</h4>
 
                             <!-- Text -->
-                            <small class="text-body-secondary">UV + Blue Light</small>
+                            <small class="text-body-secondary">{{ order.client.email }}</small>
 
                           </div>
 
@@ -229,145 +225,14 @@
                       <td class="products-stock">
 
                         <!-- Badge -->
-                        <span class="badge text-bg-warning-subtle">Unavailable</span>
+                        <span class="badge text-bg-warning-subtle">{{ order.ref }}</span>
 
                       </td>
                       <td class="products-price">
-                        €39.99
+                        {{ order.totalAmount }} $
                       </td>
                       <td class="products-sales">
-                        €2,611.82
-                      </td>
-                      <td class="text-end">
-
-                        <!-- Dropdown -->
-                        <div class="dropdown">
-                          <a href="#" class="dropdown-ellipses dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fe fe-more-vertical"></i>
-                          </a>
-                          <div class="dropdown-menu dropdown-menu-end">
-                            <a href="#!" class="dropdown-item">
-                              Action
-                            </a>
-                            <a href="#!" class="dropdown-item">
-                              Another action
-                            </a>
-                            <a href="#!" class="dropdown-item">
-                              Something else here
-                            </a>
-                          </div>
-                        </div>
-
-                      </td>
-                    </tr>
-                    <tr>
-                      <td class="products-product">
-                        <div class="d-flex align-items-center">
-
-                          <!-- Image -->
-                          <div class="avatar">
-                            <img class="avatar-img rounded me-3" src="assets/img/avatars/products/product-3.jpg" alt="...">
-                          </div>
-
-                          <div class="ms-3">
-
-                            <!-- Heading -->
-                            <h4 class="fw-normal mb-1">Nike "Go Bag"</h4>
-
-                            <!-- Text -->
-                            <small class="text-body-secondary">Leather + Gortex</small>
-
-                          </div>
-
-                        </div>
-                      </td>
-                      <td class="products-stock">
-
-                        <!-- Badge -->
-                        <span class="badge text-bg-success-subtle">Available</span>
-
-                      </td>
-                      <td class="products-price">
-                        €149.99
-                      </td>
-                      <td class="products-sales">
-                        €2,372.19
-                      </td>
-                      <td class="text-end">
-
-                        <!-- Dropdown -->
-                        <div class="dropdown">
-                          <a href="#" class="dropdown-ellipses dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fe fe-more-vertical"></i>
-                          </a>
-                          <div class="dropdown-menu dropdown-menu-end">
-                            <a href="#!" class="dropdown-item">
-                              Action
-                            </a>
-                            <a href="#!" class="dropdown-item">
-                              Another action
-                            </a>
-                            <a href="#!" class="dropdown-item">
-                              Something else here
-                            </a>
-                          </div>
-                        </div>
-
-                      </td>
-                    </tr>
-                    <tr>
-                      <td class="products-product">
-                        <div class="d-flex align-items-center">
-
-                          <!-- Image -->
-                          <div class="avatar">
-                            <img class="avatar-img rounded me-3" src="assets/img/avatars/products/product-4.jpg" alt="...">
-                          </div>
-
-                          <div class="ms-3">
-
-                            <!-- Heading -->
-                            <h4 class="fw-normal mb-1">Swell Bottle</h4>
-
-                            <!-- Text -->
-                            <small class="text-body-secondary">Bone Clay White</small>
-
-                          </div>
-
-                        </div>
-                      </td>
-                      <td class="products-stock">
-
-                        <!-- Badge -->
-                        <span class="badge text-bg-success-subtle">Available</span>
-
-                      </td>
-                      <td class="products-price">
-                        €24.99
-                      </td>
-                      <td class="products-sales">
-                        €1,145.23
-                      </td>
-                      <td class="text-end">
-
-                        <!-- Dropdown -->
-                        <div class="dropdown">
-                          <a href="#" class="dropdown-ellipses dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fe fe-more-vertical"></i>
-                          </a>
-                          <div class="dropdown-menu dropdown-menu-end">
-                            <a href="#!" class="dropdown-item">
-                              Action
-                            </a>
-                            <a href="#!" class="dropdown-item">
-                              Another action
-                            </a>
-                            <a href="#!" class="dropdown-item">
-                              Something else here
-                            </a>
-                          </div>
-                        </div>
-
+                        {{ order.createdAt }} $
                       </td>
                     </tr>
                   </tbody>
