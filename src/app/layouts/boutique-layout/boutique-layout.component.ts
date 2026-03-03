@@ -4,10 +4,10 @@ import { environment } from '../../../environments/environment.prod';
 import { firstValueFrom } from 'rxjs/internal/firstValueFrom';
 import { AuthService } from '../../page/login/auth.service';
 import { HttpClient } from '@angular/common/http';
-
+import { FooterComponent } from '../../footer/footer.component';
 @Component({
   selector: 'app-boutique-layout',
-  imports: [RouterModule , RouterOutlet],
+  imports: [RouterModule, RouterOutlet, FooterComponent],
   templateUrl: './boutique-layout.component.html',
   styleUrl: './boutique-layout.component.css',
 })

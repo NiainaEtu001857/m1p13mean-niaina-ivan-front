@@ -4,11 +4,10 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterModule, RouterOutlet } from '@angular/router';
 import { AuthService } from '../../page/login/auth.service';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
-
+import { FooterComponent } from '../../footer/footer.component';
 @Component({
   selector: 'app-client-layout',
-  imports: [RouterModule, RouterOutlet, CommonModule, FormsModule],
+  imports: [RouterModule, RouterOutlet, CommonModule, FormsModule, FooterComponent],
   templateUrl: './client-layout.component.html',
   styleUrl: './client-layout.component.css',
 })

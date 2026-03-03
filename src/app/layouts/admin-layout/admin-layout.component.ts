@@ -3,13 +3,15 @@ import { Router, RouterModule, RouterOutlet } from "@angular/router";
 import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../page/login/auth.service';
+import { FooterComponent } from '../../footer/footer.component';
 
 
 @Component({
   selector: 'app-admin-layout',
   imports: [
     RouterOutlet,
-    RouterModule
+    RouterModule,
+    FooterComponent
   ],
   templateUrl: './admin-layout.component.html',
   styleUrl: './admin-layout.component.css',
