@@ -11,14 +11,8 @@
                 Overview
               </h6>
               <h1 class="header-title text-truncate">
-                Liste des commandes
+                Lists the orders
               </h1>
-            </div>
-
-            <div class="col-auto">
-              <button class="btn btn-primary">
-                Exporter
-              </button>
             </div>
           </div>
         </div>
@@ -47,11 +41,11 @@
                 [(ngModel)]="statusFilter"
                 (change)="applyFilters()"
               >
-                <option value="">Tous statuts</option>
-                <option value="En attente">En attente</option>
-                <option value="Confirmée">Confirmée</option>
-                <option value="Expédiée">Expédiée</option>
-                <option value="Annulée">Annulée</option>
+                <option value="">All statuses</option>
+                <option value="En attente">Pending</option>
+                <option value="Confirmée">Confirmed</option>
+                <option value="Expédiée">Shipped</option>
+                <option value="Annulée">Cancelled</option>
               </select>
             </div>
 
@@ -70,12 +64,12 @@
 
             <thead class="table-light">
               <tr>
-                <th>ID Commande</th>
+                <th>ID Order</th>
                 <th>Client</th>
                 <th>Date</th>
-                <th>Articles</th>
+                <th>Products</th>
                 <th class="text-end">Total</th>
-                <th>Statut</th>
+                <th>Status</th>
                 <th class="text-end">Actions</th>
               </tr>
             </thead>
@@ -102,7 +96,7 @@
                       {{ item.quantity }} × {{ item.name }}
                     </li>
                     <li *ngIf="order.items.length > 2" class="text-muted">
-                      +{{ order.items.length - 2 }} autres…
+                      +{{ order.items.length - 2 }} other(s)
                     </li>
                   </ul>
                 </td>
@@ -136,13 +130,13 @@
 
                     <div class="dropdown-menu dropdown-menu-end">
                       <button type="button" class="dropdown-item" (click)="viewOrder(order)">
-                        Voir
+                        View
                       </button>
                       <button type="button" class="dropdown-item" (click)="editOrder(order)">
-                        Modifier
+                        Edit
                       </button>
                       <button type="button" class="dropdown-item text-danger">
-                        Annuler
+                        Cancel
                       </button>
                     </div>
                   </div>

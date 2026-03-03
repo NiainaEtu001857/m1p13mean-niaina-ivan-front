@@ -1,63 +1,6 @@
 <div data-bs-theme="dark">
         <div class="header pb-5">
           <div class="container-fluid">
-
-            <!-- Body -->
-            <div class="header-body">
-              <div class="row align-items-end">
-                <div class="col">
-
-                  <!-- Pretitle -->
-                  <h6 class="header-pretitle">
-                    Annual
-                  </h6>
-
-                  <!-- Title -->
-                  <h1 class="header-title">
-                    Audience
-                  </h1>
-
-                </div>
-                <div class="col-auto">
-
-                  <!-- Nav -->
-                  <ul class="nav nav-tabs header-tabs">
-                    <li class="nav-item" data-toggle="chart" data-target="#audienceChart" data-trigger="click" data-action="toggle" data-dataset="0">
-                      <a href="#" class="nav-link text-center active" data-bs-toggle="tab">
-                        <h6 class="header-pretitle">
-                          Customers
-                        </h6>
-                        <h3 class="mb-0">
-                          73.2k
-                        </h3>
-                      </a>
-                    </li>
-                    <li class="nav-item" data-toggle="chart" data-target="#audienceChart" data-trigger="click" data-action="toggle" data-dataset="1">
-                      <a href="#" class="nav-link text-center" data-bs-toggle="tab">
-                        <h6 class="header-pretitle">
-                          Sessions
-                        </h6>
-                        <h3 class="mb-0">
-                          92.1k
-                        </h3>
-                      </a>
-                    </li>
-                    <li class="nav-item" data-toggle="chart" data-target="#audienceChart" data-trigger="click" data-action="toggle" data-dataset="2">
-                      <a href="#" class="nav-link text-center" data-bs-toggle="tab">
-                        <h6 class="header-pretitle">
-                          Conversion
-                        </h6>
-                        <h3 class="mb-0">
-                          50.2%
-                        </h3>
-                      </a>
-                    </li>
-                  </ul>
-
-                </div>
-              </div><!-- / .row -->
-            </div> <!-- / .header-body -->
-
             <!-- Footer -->
             <div class="header-footer">
 
@@ -86,19 +29,19 @@
                     <div class="col">
                         <!-- Title -->
                         <h6 class="text-uppercase text-body-secondary mb-2">
-                        Nom de produits
+                        Number of products or services
                         </h6>
 
                         <!-- Heading -->
                         <span class="h2 mb-0">
-                        5
+                        2
                         </span>
 
                     </div>
                     <div class="col-auto">
 
                         <!-- Icon -->
-                        <span class="h2 fe fe-dollar-sign text-body-secondary mb-0"></span>
+                        <span class="h2 fe fe-package text-body-secondary mb-0"></span>
 
                     </div>
                 </div> <!-- / .row -->  
@@ -116,12 +59,12 @@
 
                     <!-- Title -->
                     <h6 class="text-uppercase text-body-secondary mb-2">
-                        Nombre d' achat
+                        Number of purchases
                     </h6>
 
                     <!-- Heading -->
                     <span class="h2 mb-0">
-                      763.5
+                      4
                     </span>
 
                   </div>
@@ -154,7 +97,7 @@
 
                         <!-- Heading -->
                         <span class="h2 me-2 mb-0">
-                          84.5%
+                           € 12000 
                         </span>
 
                       </div>
@@ -181,7 +124,7 @@
 
                     <!-- Title -->
                     <h6 class="text-uppercase text-body-secondary mb-2">
-                        Nombre de commandes
+                       Number of orders
                     </h6>
 
                     <!-- Heading -->
@@ -210,8 +153,9 @@
 
                 <!-- Title -->
                 <h4 class="card-header-title">
-                    Les produits les plus vendus
+                    The most recent orders
                 </h4>
+                
 
               </div>
               <div class="table-responsive mb-0" data-list='{"valueNames": ["products-product", "products-stock", "products-price", "products-sales"]}' id="productsList">
@@ -220,80 +164,45 @@
                     <tr>
                       <th>
                         <a href="#" class="text-body-secondary list-sort" data-sort="products-product">
-                          Product
+                          Reference
                         </a>
                       </th>
                       <th>
                         <a href="#" class="text-body-secondary list-sort" data-sort="products-stock">
-                          Vendu
+                          Client
                         </a>
                       </th>
                       <th>
                         <a href="#" class="text-body-secondary list-sort" data-sort="products-price">
-                          Prix
+                          Price
                         </a>
                       </th>
                       <th colspan="2">
                         <a href="#" class="text-body-secondary list-sort" data-sort="products-sales">
-                          Monthly Sales
+                          Status
                         </a>
                       </th>
                     </tr>
                   </thead>
                   <tbody class="list">
                     <tr>
-                      <td class="products-product">
+                      <td class="order-reference">
                         <div class="d-flex align-items-center">
-
-                          <!-- Image -->
-                          <div class="avatar">
-                            <img class="avatar-img rounded me-3" src="assets/img/avatars/products/product-1.jpg" alt="...">
-                          </div>
-
-                          <div class="ms-3">
 
                             <!-- Heading -->
                             <h4 class="fw-normal mb-1">Sketchpad</h4>
 
-                            <!-- Text -->
-                            <small class="text-body-secondary">3" x 5" Size</small>
-
-                          </div>
-
                         </div>
                       </td>
-                      <td class="products-stock">
-
-                        <!-- Badge -->
-                        <span class="badge text-bg-success-subtle">Available</span>
+                      <td class="order-client">
 
                       </td>
-                      <td class="products-price">
-                        $14.99
+                      <td class="order-price">
+                        €14.99
                       </td>
-                      <td class="products-sales">
-                        $3,145.23
-                      </td>
-                      <td class="text-end">
-
-                        <!-- Dropdown -->
-                        <div class="dropdown">
-                          <a href="#" class="dropdown-ellipses dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fe fe-more-vertical"></i>
-                          </a>
-                          <div class="dropdown-menu dropdown-menu-end">
-                            <a href="#!" class="dropdown-item">
-                              Action
-                            </a>
-                            <a href="#!" class="dropdown-item">
-                              Another action
-                            </a>
-                            <a href="#!" class="dropdown-item">
-                              Something else here
-                            </a>
-                          </div>
-                        </div>
-
+                      <td class="order-status">
+                        <span class="badge text-bg-success-subtle">Pending</span>
+                        
                       </td>
                     </tr>
                     <tr>
@@ -324,10 +233,10 @@
 
                       </td>
                       <td class="products-price">
-                        $39.99
+                        €39.99
                       </td>
                       <td class="products-sales">
-                        $2,611.82
+                        €2,611.82
                       </td>
                       <td class="text-end">
 
@@ -379,10 +288,10 @@
 
                       </td>
                       <td class="products-price">
-                        $149.99
+                        €149.99
                       </td>
                       <td class="products-sales">
-                        $2,372.19
+                        €2,372.19
                       </td>
                       <td class="text-end">
 
@@ -434,10 +343,10 @@
 
                       </td>
                       <td class="products-price">
-                        $24.99
+                        €24.99
                       </td>
                       <td class="products-sales">
-                        $1,145.23
+                        €1,145.23
                       </td>
                       <td class="text-end">
 
