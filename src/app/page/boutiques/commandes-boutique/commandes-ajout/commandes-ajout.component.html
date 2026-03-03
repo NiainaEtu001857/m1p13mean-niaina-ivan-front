@@ -67,7 +67,9 @@
             </div>
 
             <div class="col-md-2 d-flex align-items-end">
-              <button type="button" class="btn btn-primary w-100" (click)="addItem()">Ajouter</button>
+              <button type="button" class="btn btn-primary w-100" (click)="addItem()" [disabled]="isCheckingStock">
+                {{ isCheckingStock ? 'Vérification...' : 'Ajouter' }}
+              </button>
             </div>
 
             <div class="col-12 mt-3">

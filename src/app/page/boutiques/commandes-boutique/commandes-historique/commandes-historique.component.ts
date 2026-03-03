@@ -11,6 +11,8 @@ interface Client {
 }
 
 interface OrderItem {
+  service?: string;
+  serviceId?: string;
   serviceName: string;
   quantity: number;
   unitPrice: number;
@@ -39,14 +41,21 @@ export class CommandesHistoriqueComponent implements OnInit {
   statusFilter: string = '';
   orders: Order[] = [];
   filteredOrders: Order[] = [];
+  selectedOrder: Order | null = null;
+  showModal = false;
+  showEditModal = false;
   clientsById: Record<string, Client> = {};
   shopId: string = '';
   isLoading = false;
+  isSaving = false;
   errorMessage = '';
+  saveMessage = '';
+  saveErrorMessage = '';
   page = 1;
   limit = 10;
   totalPages = 0;
   totalItems = 0;
+  editableOrder: Order | null = null;
 
   constructor(private orderService: OrderService) {}
 
@@ -83,11 +92,11 @@ export class CommandesHistoriqueComponent implements OnInit {
           return acc;
         }, {});
         if (Array.isArray(orders?.data)) {
-          this.orders = orders.data;
+          this.orders = orders.data.map((order: Order) => this.normalizeOrder(order));
           this.totalItems = Number(orders?.totalItems) || this.orders.length;
           this.totalPages = Math.max(Number(orders?.totalPages) || 1, 1);
         } else {
-          this.orders = Array.isArray(orders) ? orders : [];
+          this.orders = (Array.isArray(orders) ? orders : []).map((order: Order) => this.normalizeOrder(order));
           this.totalItems = this.orders.length;
           this.totalPages = 1;
         }
@@ -122,12 +131,120 @@ export class CommandesHistoriqueComponent implements OnInit {
   deleteOrder(orderId: string) {
     if (confirm('Voulez-vous supprimer cette commande ?')) {
       this.orders = this.orders.filter((order) => order._id !== orderId);
+      if (this.selectedOrder?._id === orderId) {
+        this.closeModal();
+      }
       this.applyFilters();
     }
   }
 
-  viewOrder(order: Order) {
-    console.log('Commande :', order);
+  viewOrder(order: Order): void {
+    this.openDetail(order);
+  }
+
+  editOrder(order: Order): void {
+    this.saveErrorMessage = '';
+    this.saveMessage = '';
+    this.editableOrder = {
+      ...order,
+      items: (order.items || []).map((item) => ({ ...item }))
+    };
+    this.showEditModal = true;
+  }
+
+  closeOrderDetails(): void {
+    this.closeModal();
+  }
+
+  openDetail(order: Order): void {
+    this.selectedOrder = order;
+    this.showModal = true;
+  }
+
+  closeModal(): void {
+    this.selectedOrder = null;
+    this.showModal = false;
+  }
+
+  closeEditModal(): void {
+    this.editableOrder = null;
+    this.showEditModal = false;
+    this.isSaving = false;
+    this.saveErrorMessage = '';
+  }
+
+  updateItemTotal(item: OrderItem): void {
+    const qty = Number(item.quantity) || 0;
+    const price = Number(item.unitPrice) || 0;
+    item.quantity = Math.max(Math.trunc(qty), 0);
+    item.totalPrice = item.quantity * price;
+    this.updateEditableTotal();
+  }
+
+  updateEditableTotal(): void {
+    if (!this.editableOrder) return;
+    this.editableOrder.totalAmount = (this.editableOrder.items || []).reduce(
+      (sum, item) => sum + Number(item.totalPrice || 0),
+      0
+    );
+  }
+
+  saveOrderChanges(): void {
+    if (!this.editableOrder || !this.shopId || this.isSaving) return;
+
+    const hasItems = (this.editableOrder.items || []).some((item) => Number(item.quantity) > 0);
+    if (!hasItems) {
+      this.saveErrorMessage = 'La commande doit contenir au moins un article avec une quantité > 0.';
+      return;
+    }
+
+    this.isSaving = true;
+    this.saveErrorMessage = '';
+    this.saveMessage = '';
+    const extractServiceId = (value: unknown): string => {
+      if (!value) return '';
+      if (typeof value === 'string') return value;
+      if (typeof value === 'object' && value !== null && '_id' in (value as Record<string, unknown>)) {
+        return String((value as Record<string, unknown>)['_id'] || '');
+      }
+      return '';
+    };
+
+    const payload = {
+      status: this.editableOrder.status,
+      items: (this.editableOrder.items || []).map((item) => ({
+        service: extractServiceId(item.serviceId) || extractServiceId(item.service),
+        serviceId: extractServiceId(item.serviceId) || extractServiceId(item.service),
+        quantity: Number(item.quantity) || 0
+      }))
+    };
+
+    this.orderService
+      .updateShopOrder(this.editableOrder._id, this.shopId, payload)
+      .subscribe({
+        next: (updatedOrder) => {
+          this.orders = this.orders.map((order) =>
+            order._id === updatedOrder._id ? updatedOrder : order
+          );
+
+          if (this.selectedOrder?._id === updatedOrder._id) {
+            this.selectedOrder = updatedOrder;
+          }
+
+          this.applyFilters();
+          this.saveMessage = 'Commande modifiée avec succès.';
+          this.isSaving = false;
+          this.closeEditModal();
+        },
+        error: (error) => {
+          this.isSaving = false;
+          console.error('Erreur update commande:', error);
+          this.saveErrorMessage =
+            error?.error?.message ||
+            error?.error?.error ||
+            'Erreur lors de la modification de la commande.';
+        }
+      });
   }
 
   previousPage(): void {
@@ -150,5 +267,34 @@ export class CommandesHistoriqueComponent implements OnInit {
     if (status === 'delivered') return 'Livrée';
     if (status === 'cancelled') return 'Annulée';
     return status;
+  }
+
+  private normalizeOrder(order: Order): Order {
+    return {
+      ...order,
+      items: (order.items || []).map((item) => this.normalizeItem(item))
+    };
+  }
+
+  private normalizeItem(item: OrderItem): OrderItem {
+    const serviceValue = this.toId(item.service) || this.toId(item.serviceId);
+
+    return {
+      ...item,
+      service: serviceValue,
+      serviceId: serviceValue,
+      quantity: Number(item.quantity) || 0,
+      unitPrice: Number(item.unitPrice) || 0,
+      totalPrice: Number(item.totalPrice) || 0
+    };
+  }
+
+  private toId(value: unknown): string {
+    if (!value) return '';
+    if (typeof value === 'string') return value;
+    if (typeof value === 'object' && value !== null && '_id' in (value as Record<string, unknown>)) {
+      return String((value as Record<string, unknown>)['_id'] || '');
+    }
+    return '';
   }
 }

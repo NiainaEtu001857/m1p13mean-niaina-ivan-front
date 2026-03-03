@@ -36,6 +36,10 @@
       </div>
 
       <!-- Table -->
+      <div *ngIf="saveMessage" class="alert alert-success mx-3 mt-3 mb-0 py-2">
+        {{ saveMessage }}
+      </div>
+
       <div class="table-responsive">
         <table class="table table-sm table-hover table-nowrap card-table">
           <thead>
@@ -101,6 +105,13 @@
                 </button>
 
                 <button
+                  class="btn btn-sm btn-outline-warning me-1"
+                  (click)="editOrder(order)"
+                >
+                  <i class="fe fe-edit"></i>
+                </button>
+
+                <button
                   class="btn btn-sm btn-outline-danger"
                   (click)="deleteOrder(order._id)"
                 >
@@ -133,5 +144,157 @@
       </div>
 
     </div>
+
+    <div
+      class="modal fade show"
+      tabindex="-1"
+      [ngStyle]="{ display: showModal ? 'block' : 'none', background: 'rgba(0,0,0,0.5)' }"
+    >
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content" *ngIf="selectedOrder as order">
+          <div class="modal-header">
+            <h5 class="modal-title">Détails de la commande {{ order.ref || order._id }}</h5>
+            <button type="button" class="btn-close" (click)="closeModal()"></button>
+          </div>
+
+          <div class="modal-body">
+            <div class="row g-3 mb-3">
+              <div class="col-md-4">
+                <div class="border rounded p-3 h-100">
+                  <small class="text-muted d-block">Client</small>
+                  <span class="fw-semibold">{{ clientsById[order.client]?.first_name || 'Client inconnu' }}</span>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="border rounded p-3 h-100">
+                  <small class="text-muted d-block">Email</small>
+                  <span class="fw-semibold">{{ clientsById[order.client]?.email || '-' }}</span>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="border rounded p-3 h-100">
+                  <small class="text-muted d-block">Date</small>
+                  <span class="fw-semibold">{{ order.createdAt | date:'dd/MM/yyyy HH:mm' }}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="table-responsive">
+              <table class="table table-sm table-bordered">
+                <thead>
+                  <tr>
+                    <th>Nom</th>
+                    <th>Quantité</th>
+                    <th>Prix Unitaire</th>
+                    <th>Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of order.items">
+                    <td>{{ item.serviceName || '-' }}</td>
+                    <td>{{ item.quantity || 0 }}</td>
+                    <td>{{ (item.unitPrice || 0) | currency:'EUR' }}</td>
+                    <td>{{ (item.totalPrice || 0) | currency:'EUR' }}</td>
+                  </tr>
+                  <tr *ngIf="!order.items || order.items.length === 0">
+                    <td colspan="4" class="text-center text-muted py-3">Aucun article trouvé pour cette commande.</td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <th colspan="3" class="text-end">Statut</th>
+                    <th>{{ getStatusLabel(order.status) }}</th>
+                  </tr>
+                  <tr>
+                    <th colspan="3" class="text-end">Montant total</th>
+                    <th>{{ order.totalAmount | currency:'EUR' }}</th>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button class="btn btn-secondary" (click)="closeModal()">Fermer</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="modal fade show"
+      tabindex="-1"
+      [ngStyle]="{ display: showEditModal ? 'block' : 'none', background: 'rgba(0,0,0,0.5)' }"
+    >
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content" *ngIf="editableOrder as order">
+          <div class="modal-header">
+            <h5 class="modal-title">Modifier la commande {{ order.ref || order._id }}</h5>
+            <button type="button" class="btn-close" (click)="closeEditModal()"></button>
+          </div>
+
+          <div class="modal-body">
+            <div class="mb-3">
+              <label class="form-label">Statut</label>
+              <select class="form-select" [(ngModel)]="order.status">
+                <option value="pending">En attente</option>
+                <option value="confirmed">Confirmée</option>
+                <option value="delivered">Livrée</option>
+                <option value="cancelled">Annulée</option>
+              </select>
+            </div>
+
+            <div class="table-responsive">
+              <table class="table table-sm table-bordered align-middle">
+                <thead>
+                  <tr>
+                    <th>Service</th>
+                    <th>Prix unitaire</th>
+                    <th style="width: 160px;">Quantité</th>
+                    <th>Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of order.items">
+                    <td>{{ item.serviceName || '-' }}</td>
+                    <td>{{ (item.unitPrice || 0) | currency:'EUR' }}</td>
+                    <td>
+                      <input
+                        type="number"
+                        class="form-control form-control-sm"
+                        min="0"
+                        [(ngModel)]="item.quantity"
+                        (ngModelChange)="updateItemTotal(item)"
+                      >
+                    </td>
+                    <td>{{ (item.totalPrice || 0) | currency:'EUR' }}</td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <th colspan="3" class="text-end">Nouveau total</th>
+                    <th>{{ order.totalAmount | currency:'EUR' }}</th>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+
+            <div *ngIf="saveErrorMessage" class="alert alert-danger mt-3 mb-0 py-2">
+              {{ saveErrorMessage }}
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button class="btn btn-secondary" (click)="closeEditModal()" [disabled]="isSaving">
+              Annuler
+            </button>
+            <button class="btn btn-primary" (click)="saveOrderChanges()" [disabled]="isSaving">
+              {{ isSaving ? 'Enregistrement...' : 'Enregistrer les modifications' }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
