@@ -38,6 +38,10 @@ export class OrderService {
     return this.http.get<any>(`${this.API}/orders/shop/${shopId}`, { params });
   }
 
+  verifyStock(item: { service: string; quantity: number }): Observable<any> {
+    return this.http.post<any>(`${this.API}/orders/verify-stock`, { item });
+  }
+
   getClientOrdersPending(page?: number, limit?: number): Observable<any> {
     let params = new HttpParams();
     if (page !== undefined) params = params.set('page', page);

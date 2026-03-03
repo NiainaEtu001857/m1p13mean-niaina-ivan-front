@@ -19,6 +19,7 @@ export class CommandesAjoutComponent implements OnInit {
 
   clients: any[] = [];
   services: any[] = [];
+  isCheckingStock = false;
 
   shopId: string = '';
 
@@ -42,20 +43,35 @@ export class CommandesAjoutComponent implements OnInit {
   }
 
   addItem(): void {
-    if (!this.newItem.serviceId || this.newItem.quantity <= 0) return;
+    if (!this.newItem.serviceId || this.newItem.quantity <= 0 || this.isCheckingStock) return;
     const service = this.services.find((s: any) => s._id === this.newItem.serviceId);
     if (!service) return;
-    const unitPrice = Number(service.sale_price || 0);
-    this.order.items.push({
-      serviceId: this.newItem.serviceId,
-      serviceName: service.name,
-      quantity: this.newItem.quantity,
-      unitPrice,
-      totalPrice: this.newItem.quantity * unitPrice
-    });
+    const alreadyAddedQty = this.order.items
+      .filter((item: any) => item.serviceId === this.newItem.serviceId)
+      .reduce((sum: number, item: any) => sum + Number(item.quantity || 0), 0);
+    const requestedQuantity = Number(this.newItem.quantity) + alreadyAddedQty;
 
-    this.calculateTotal();
-    this.newItem = { serviceId: '', quantity: 1 };
+    this.isCheckingStock = true;
+    this.orderService.verifyStock({ service: this.newItem.serviceId, quantity: requestedQuantity }).subscribe({
+      next: () => {
+        const unitPrice = Number(service.sale_price || 0);
+        this.order.items.push({
+          serviceId: this.newItem.serviceId,
+          serviceName: service.name,
+          quantity: Number(this.newItem.quantity),
+          unitPrice,
+          totalPrice: Number(this.newItem.quantity) * unitPrice
+        });
+
+        this.calculateTotal();
+        this.newItem = { serviceId: '', quantity: 1 };
+        this.isCheckingStock = false;
+      },
+      error: (err) => {
+        this.isCheckingStock = false;
+        alert('Le service ou produits est en rupture de stock.');
+      }
+    });
   }
 
   get selectedServicePrice(): number {
