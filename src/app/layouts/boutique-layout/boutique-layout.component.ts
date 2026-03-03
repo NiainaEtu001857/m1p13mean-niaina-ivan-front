@@ -1,7 +1,5 @@
 import { Component, HostListener } from '@angular/core';
 import { Router, RouterModule, RouterOutlet } from "@angular/router";
-import { environment } from '../../../environments/environment.prod';
-import { firstValueFrom } from 'rxjs/internal/firstValueFrom';
 import { AuthService } from '../../page/login/auth.service';
 import { HttpClient } from '@angular/common/http';
 import { FooterComponent } from '../../footer/footer.component';
@@ -13,7 +11,11 @@ import { FooterComponent } from '../../footer/footer.component';
 })
 export class BoutiqueLayoutComponent {
 
-  constructor(private authService: AuthService, private http: HttpClient , private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private http: HttpClient,
+    private router: Router
+  ) {}
 
   isDropdownOpen = false;
 

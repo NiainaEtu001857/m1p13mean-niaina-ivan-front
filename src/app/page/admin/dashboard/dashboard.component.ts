@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { TauxRevenuComponent } from "./taux-revenu/taux-revenu.component";
 import { CommonModule } from '@angular/common';
@@ -29,6 +29,7 @@ type Stats = {
   imports: [CommonModule, TauxRevenuComponent, TauxRevenuMensuelComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
 export class DashboardComponent {
@@ -37,7 +38,7 @@ export class DashboardComponent {
   errorMessage = '';
   
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.loadStats();
@@ -47,6 +48,7 @@ export class DashboardComponent {
     const token = localStorage.getItem('token');
     if (!token) {
       this.errorMessage = 'Vous devez vous connecter.';
+      this.cdr.markForCheck();
       return;
     }
     this.isLoading = true;
@@ -63,10 +65,12 @@ export class DashboardComponent {
       console.log('Stats response:', response);
       this.stats = response;
       this.isLoading = false;
+      this.cdr.markForCheck();
     } catch (error: any){
       this.errorMessage = error?.error?.message || error?.error?.error || 'Erreur chargement ';
       this.stats = {};
       this.isLoading = false;
+      this.cdr.markForCheck();
     }
   }
   

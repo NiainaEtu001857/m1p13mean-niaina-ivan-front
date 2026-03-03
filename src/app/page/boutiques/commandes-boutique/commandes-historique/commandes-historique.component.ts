@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { forkJoin } from 'rxjs';
 import { OrderService } from '../../../../services/order';
@@ -35,6 +35,7 @@ interface Order {
   imports: [CommonModule , FormsModule ],
   templateUrl: './commandes-historique.component.html',
   styleUrl: './commandes-historique.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CommandesHistoriqueComponent implements OnInit {
   searchText: string = '';
@@ -57,7 +58,7 @@ export class CommandesHistoriqueComponent implements OnInit {
   totalItems = 0;
   editableOrder: Order | null = null;
 
-  constructor(private orderService: OrderService) {}
+  constructor(private orderService: OrderService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     const storedUser = localStorage.getItem('user');
@@ -74,6 +75,7 @@ export class CommandesHistoriqueComponent implements OnInit {
       this.loadData();
     } else {
       this.errorMessage = 'Boutique introuvable.';
+      this.cdr.markForCheck();
     }
   }
 
@@ -102,12 +104,14 @@ export class CommandesHistoriqueComponent implements OnInit {
         }
         this.applyFilters();
         this.isLoading = false;
+        this.cdr.markForCheck();
       },
       error: () => {
         this.errorMessage = 'Erreur lors du chargement de l\'historique.';
         this.totalItems = 0;
         this.totalPages = 0;
         this.isLoading = false;
+        this.cdr.markForCheck();
       }
     });
   }
@@ -235,6 +239,7 @@ export class CommandesHistoriqueComponent implements OnInit {
           this.saveMessage = 'Commande modifiée avec succès.';
           this.isSaving = false;
           this.closeEditModal();
+          this.cdr.markForCheck();
         },
         error: (error) => {
           this.isSaving = false;
@@ -243,6 +248,7 @@ export class CommandesHistoriqueComponent implements OnInit {
             error?.error?.message ||
             error?.error?.error ||
             'Erreur lors de la modification de la commande.';
+          this.cdr.markForCheck();
         }
       });
   }

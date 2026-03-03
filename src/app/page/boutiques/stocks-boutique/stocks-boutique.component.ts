@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { environment } from '../../../../environments/environment';
@@ -10,6 +10,7 @@ import { environment } from '../../../../environments/environment';
   imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './stocks-boutique.component.html',
   styleUrl: './stocks-boutique.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StocksBoutiqueComponent implements OnInit {
   searchText = '';
@@ -25,7 +26,7 @@ export class StocksBoutiqueComponent implements OnInit {
   totalPages = 0;
   totalItems = 0;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.loadStocks();
@@ -35,6 +36,7 @@ export class StocksBoutiqueComponent implements OnInit {
     const token = localStorage.getItem('token');
     if (!token) {
       this.errorMessage = 'Vous devez vous connecter.';
+      this.cdr.markForCheck();
       return;
     }
 
@@ -70,12 +72,14 @@ export class StocksBoutiqueComponent implements OnInit {
           ).sort((a, b) => a.localeCompare(b, 'fr'));
           this.applyFilter();
           this.isLoading = false;
+          this.cdr.markForCheck();
         },
         error: (error) => {
           this.errorMessage = error?.error?.message || error?.error?.error || 'Erreur lors du chargement.';
           this.totalItems = 0;
           this.totalPages = 0;
           this.isLoading = false;
+          this.cdr.markForCheck();
         },
       });
   }
@@ -95,6 +99,7 @@ export class StocksBoutiqueComponent implements OnInit {
       ];
       return values.some((value) => String(value ?? '').toLowerCase().includes(term));
     });
+    this.cdr.markForCheck();
   }
 
   getStatusLabel(quantity: number): string {
