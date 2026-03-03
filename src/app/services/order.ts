@@ -42,6 +42,14 @@ export class OrderService {
     return this.http.post<any>(`${this.API}/orders/verify-stock`, { item });
   }
 
+  updateShopOrder(
+    orderId: string,
+    shopId: string,
+    payload: { status?: string; items?: Array<{ service: string; quantity: number }> }
+  ): Observable<any> {
+    return this.http.patch<any>(`${this.API}/orders/${orderId}/shop/${shopId}`, payload);
+  }
+
   getClientOrdersPending(page?: number, limit?: number): Observable<any> {
     let params = new HttpParams();
     if (page !== undefined) params = params.set('page', page);
