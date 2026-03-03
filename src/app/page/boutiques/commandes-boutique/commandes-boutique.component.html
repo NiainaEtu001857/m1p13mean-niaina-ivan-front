@@ -81,7 +81,7 @@
             </thead>
 
             <tbody>
-              <tr *ngFor="let order of orders">
+              <tr *ngFor="let order of pagedOrders">
 
                 <td class="fw-semibold">
                   {{ order.id }}
@@ -135,15 +135,15 @@
                     </button>
 
                     <div class="dropdown-menu dropdown-menu-end">
-                      <a class="dropdown-item" (click)="viewOrder(order)">
+                      <button type="button" class="dropdown-item" (click)="viewOrder(order)">
                         Voir
-                      </a>
-                      <a class="dropdown-item" (click)="editOrder(order)">
+                      </button>
+                      <button type="button" class="dropdown-item" (click)="editOrder(order)">
                         Modifier
-                      </a>
-                      <a class="dropdown-item text-danger">
+                      </button>
+                      <button type="button" class="dropdown-item text-danger">
                         Annuler
-                      </a>
+                      </button>
                     </div>
                   </div>
                 </td>
@@ -164,6 +164,35 @@
           </div>
         </ng-template>
 
+        <div class="card-body border-top" *ngIf="selectedOrder as order">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div>
+              <h5 class="mb-1">Commande {{ order.id }}</h5>
+              <small class="text-muted">{{ order.customer.name }} - {{ order.customer.email }}</small>
+            </div>
+            <button type="button" class="btn btn-sm btn-outline-secondary" (click)="closeOrderDetails()">
+              Fermer
+            </button>
+          </div>
+
+          <div class="table-responsive">
+            <table class="table table-sm align-middle mb-0">
+              <thead class="table-light">
+                <tr>
+                  <th>Produit</th>
+                  <th class="text-end">Quantité</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of order.items">
+                  <td>{{ item.name }}</td>
+                  <td class="text-end">{{ item.quantity }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
         <!-- Footer -->
         <div class="card-footer d-flex justify-content-between align-items-center">
           <small class="text-muted">
@@ -172,14 +201,14 @@
 
           <nav>
             <ul class="pagination mb-0">
-              <li class="page-item disabled">
-                <a class="page-link">Précédent</a>
+              <li class="page-item" [class.disabled]="page <= 1">
+                <button type="button" class="page-link" (click)="previousPage()" [disabled]="page <= 1">Précédent</button>
               </li>
-              <li class="page-item active">
-                <a class="page-link">1</a>
+              <li class="page-item active" *ngIf="totalPages > 0">
+                <span class="page-link">{{ page }} / {{ totalPages }}</span>
               </li>
-              <li class="page-item">
-                <a class="page-link">Suivant</a>
+              <li class="page-item" [class.disabled]="page >= totalPages">
+                <button type="button" class="page-link" (click)="nextPage()" [disabled]="page >= totalPages">Suivant</button>
               </li>
             </ul>
           </nav>

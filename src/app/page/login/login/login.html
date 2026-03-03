@@ -17,18 +17,18 @@
           <button
             type="button"
             class="btn btn-outline-success"
-            [class.btn-success]="userType === 'shop'"
-            [class.btn-outline-success]="userType !== 'shop'"
-            (click)="setUserType('shop')">
+            [class.btn-success]="userType === 'SHOP'"
+            [class.btn-outline-success]="userType !== 'SHOP'"
+            (click)="setUserType('SHOP')">
             Shop
           </button>
 
           <button
             type="button"
             class="btn"
-            [class.btn-primary]="userType === 'client'"
-            [class.btn-outline-primary]="userType !== 'client'"
-            (click)="setUserType('client')">
+            [class.btn-primary]="userType === 'CLIENT'"
+            [class.btn-outline-primary]="userType !== 'CLIENT'"
+            (click)="setUserType('CLIENT')">
             Client
           </button>
         </div>
@@ -50,7 +50,7 @@
               class="form-control"
               [(ngModel)]="email"
               name="email"
-              [placeholder]="userType === 'admin'? 'admin@gmain.com': userType === 'shop'? 'shop@gmain.com': 'client@gmain.com'">
+              [placeholder]="userType === 'ADMIN'? 'admin@gmain.com': userType === 'SHOP'? 'shop@gmain.com': 'client@gmain.com'">
 
 
             </div>

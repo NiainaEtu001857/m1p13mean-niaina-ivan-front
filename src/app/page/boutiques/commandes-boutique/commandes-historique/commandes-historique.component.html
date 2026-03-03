@@ -14,6 +14,7 @@
                 type="search"
                 placeholder="Rechercher une commande..."
                 [(ngModel)]="searchText"
+                (ngModelChange)="applyFilters()"
               >
               <span class="input-group-text">
                 <i class="fe fe-search"></i>
@@ -22,12 +23,12 @@
           </div>
 
           <div class="col-auto me-n3">
-            <select class="form-select form-select-sm">
-              <option>Tous les statuts</option>
-              <option>En attente</option>
-              <option>Confirmée</option>
-              <option>Expédiée</option>
-              <option>Annulée</option>
+            <select class="form-select form-select-sm" [(ngModel)]="statusFilter" (ngModelChange)="applyFilters()">
+              <option value="">Tous les statuts</option>
+              <option value="pending">En attente</option>
+              <option value="confirmed">Confirmée</option>
+              <option value="delivered">Livrée</option>
+              <option value="cancelled">Annulée</option>
             </select>
           </div>
 
@@ -51,36 +52,44 @@
           </thead>
 
           <tbody>
-            <tr *ngFor="let order of orders; let i = index">
+            <tr *ngIf="isLoading">
+              <td colspan="8" class="text-center py-4">Chargement...</td>
+            </tr>
+
+            <tr *ngIf="!isLoading && errorMessage">
+              <td colspan="8" class="text-center text-danger py-4">{{ errorMessage }}</td>
+            </tr>
+
+            <tr *ngFor="let order of filteredOrders">
 
               <td>
                 <input type="checkbox">
               </td>
 
-              <td class="fw-semibold">{{ order.id }}</td>
+              <td class="fw-semibold">{{ order.ref || order._id }}</td>
 
-              <td>{{ order.customer.name }}</td>
+              <td>{{ clientsById[order.client]?.first_name || 'Client inconnu' }}</td>
 
-              <td class="text-muted">{{ order.customer.email }}</td>
+              <td class="text-muted">{{ clientsById[order.client]?.email || '-' }}</td>
 
-              <td>{{ order.date | date:'dd/MM/yyyy HH:mm' }}</td>
+              <td>{{ order.createdAt | date:'dd/MM/yyyy HH:mm' }}</td>
 
               <td>
                 <span
                   class="badge"
                   [ngClass]="{
-                    'bg-warning': order.status === 'En attente',
-                    'bg-success': order.status === 'Confirmée',
-                    'bg-info': order.status === 'Expédiée',
-                    'bg-danger': order.status === 'Annulée'
+                    'bg-warning': order.status === 'pending',
+                    'bg-success': order.status === 'confirmed',
+                    'bg-info': order.status === 'delivered',
+                    'bg-danger': order.status === 'cancelled'
                   }"
                 >
-                  {{ order.status }}
+                  {{ getStatusLabel(order.status) }}
                 </span>
               </td>
 
               <td class="fw-bold">
-                {{ order.total | currency:'EUR' }}
+                {{ order.totalAmount | currency:'EUR' }}
               </td>
 
               <td class="text-end">
@@ -93,15 +102,34 @@
 
                 <button
                   class="btn btn-sm btn-outline-danger"
-                  (click)="deleteOrder(i)"
+                  (click)="deleteOrder(order._id)"
                 >
                   <i class="fe fe-trash"></i>
                 </button>
               </td>
 
             </tr>
+
+            <tr *ngIf="!isLoading && !errorMessage && filteredOrders.length === 0">
+              <td colspan="8" class="text-center py-4">Aucun historique trouvé.</td>
+            </tr>
           </tbody>
         </table>
+      </div>
+
+      <div class="card-footer d-flex justify-content-between align-items-center">
+        <small class="text-muted">Affichage {{ filteredOrders.length }} sur {{ totalItems || filteredOrders.length }}</small>
+        <div class="btn-group btn-group-sm">
+          <button type="button" class="btn btn-outline-secondary" (click)="previousPage()" [disabled]="page <= 1 || isLoading">
+            Prev
+          </button>
+          <button type="button" class="btn btn-outline-secondary" disabled>
+            Page {{ page }} / {{ totalPages || 1 }}
+          </button>
+          <button type="button" class="btn btn-outline-secondary" (click)="nextPage()" [disabled]="page >= totalPages || isLoading || totalPages <= 1">
+            Next
+          </button>
+        </div>
       </div>
 
     </div>

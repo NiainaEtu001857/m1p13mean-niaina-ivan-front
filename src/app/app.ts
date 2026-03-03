@@ -1,9 +1,11 @@
 import { Component, signal, AfterViewInit, Renderer2, RendererFactory2 } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { CommandesAjoutComponent } from './page/boutiques/commandes-boutique/commandes-ajout/commandes-ajout.component';
+import { FormsModule } from '@angular/forms';
 declare var initSlider: any;
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet,FormsModule],
   templateUrl: './app.html',
   styleUrls: ['./app.css']
 })

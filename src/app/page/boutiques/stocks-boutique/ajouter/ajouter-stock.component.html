@@ -1,0 +1,45 @@
+<div class="container-fluid">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-10">
+      <div class="header mb-4">
+        <h6 class="header-pretitle">Stock</h6>
+        <h1 class="header-title">Ajouter un stock</h1>
+      </div>
+
+      <div class="card">
+        <div class="card-body">
+          <form class="row g-3" (submit)="submit($event)">
+            <div class="col-md-6">
+              <label class="form-label">Produit / Service</label>
+              <select class="form-select" [(ngModel)]="stockForm.service" name="service" required>
+                <option value="" disabled selected>Choisir un produit</option>
+                <option *ngFor="let s of services" [value]="s._id">
+                  {{ s.name }} ({{ s.ref }})
+                </option>
+              </select>
+              <small class="text-muted" *ngIf="isLoadingServices">Chargement des produits...</small>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Quantité</label>
+              <input
+                type="number"
+                class="form-control"
+                min="0"
+                [(ngModel)]="stockForm.quantity"
+                name="quantity"
+                required
+              >
+            </div>
+
+            <div class="col-12 text-end">
+              <button type="submit" class="btn btn-primary">
+                Enregistrer le stock
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,149 +1,149 @@
 <div class="container-fluid">
-    <div class="row justify-content-center">
-        <div class="col-12">
-            <!-- Header -->
-            <div class="header">
-                <div class="header-body">
-                    <div class="row align-items-center">
-                        <div class="col">
-
-                        <!-- Pretitle -->
-                        <h6 class="header-pretitle">
-                            Overview
-                        </h6>
-
-                        <!-- Title -->
-                        <h1 class="header-title text-truncate">
-                            Ajouter un produit
-                        </h1>
-
-                        </div>
-                    </div> <!-- / .row -->
-                </div>
+  <div class="row justify-content-center">
+    <div class="col-12">
+      <div class="header">
+        <div class="header-body">
+          <div class="row align-items-center">
+            <div class="col">
+              <h6 class="header-pretitle">Overview</h6>
+              <h1 class="header-title text-truncate">Ajouter un produit</h1>
             </div>
-            <div class="card">
-                <div class="card-body">
-                    <form class="mt-3">
-
-                    <div class="row g-3">
-
-                        <!-- Nom du produit -->
-                        <div class="col-12 col-md-6">
-                        <label class="form-label">Nom du produit</label>
-                        <input
-                            type="text"
-                            class="form-control"
-                            placeholder="Ex: Télévision Samsung"
-                            required
-                        >
-                        </div>
-
-                        <!-- Catégorie -->
-                        <div class="col-12 col-md-6">
-                        <label class="form-label">Catégorie</label>
-                        <select class="form-select" required>
-                            <option value="">Choisir une catégorie</option>
-                            <option>Électronique</option>
-                            <option>Vêtements</option>
-                            <option>Alimentation</option>
-                            <option>Chaussures</option>
-                        </select>
-                        </div>
-
-                        <!-- Prix -->
-                        <div class="col-12 col-md-4">
-                        <label class="form-label">Prix</label>
-                        <input
-                            type="number"
-                            class="form-control"
-                            placeholder="0.00"
-                            required
-                        >
-                        </div>
-
-                        <!-- Stock -->
-                        <div class="col-12 col-md-4">
-                        <label class="form-label">Stock</label>
-                        <input
-                            type="number"
-                            class="form-control"
-                            placeholder="Quantité"
-                            required
-                        >
-                        </div>
-
-                        <!-- Marque -->
-                        <div class="col-12 col-md-4">
-                        <label class="form-label">Marque</label>
-                        <input
-                            type="text"
-                            class="form-control"
-                            placeholder="Ex: Nike, Samsung"
-                        >
-                        </div>
-
-                        <!-- Description -->
-                        <div class="col-12">
-                        <label class="form-label">Description</label>
-                        <textarea
-                            class="form-control"
-                            rows="4"
-                            placeholder="Description du produit"
-                        ></textarea>
-                        </div>
-
-                        <!-- Image principale -->
-                        <div class="col-12 col-md-6">
-                        <label class="form-label">Image principale</label>
-                        <input type="file" class="form-control">
-                        </div>
-
-                        <!-- Statut -->
-                        <div class="col-12 col-md-6">
-                        <label class="form-label">Statut</label>
-                        <select class="form-select">
-                            <option value="actif">Actif</option>
-                            <option value="inactif">Inactif</option>
-                        </select>
-                        </div>
-
-                    </div>
-
-                    <!-- Attributs dynamiques -->
-                    <hr class="my-4">
-
-                    <h5>Attributs spécifiques (optionnel)</h5>
-
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                        <input
-                            type="text"
-                            class="form-control"
-                            placeholder="Clé (ex: couleur)"
-                        >
-                        </div>
-                        <div class="col-md-6">
-                        <input
-                            type="text"
-                            class="form-control"
-                            placeholder="Valeur (ex: rouge)"
-                        >
-                        </div>
-                    </div>
-
-                    <!-- Boutons -->
-                    <div class="mt-4 text-end">
-                        <button type="reset" class="btn btn-outline-secondary me-2">
-                        Annuler
-                        </button>
-                        <button type="submit" class="btn btn-primary">
-                        Enregistrer le produit
-                        </button>
-                    </div>
-
-                    </form>
-                </div>
-            </div>
+          </div>
         </div>
+      </div>
+
+      <div class="card">
+        <div class="card-body">
+          <form class="mt-3" (ngSubmit)="submit($event)">
+            <div class="row g-3">
+              <div class="col-12 col-md-6">
+                <label class="form-label">Nom du produit</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Ex: Television Samsung"
+                  [(ngModel)]="productForm.name"
+                  name="name"
+                  required
+                >
+              </div>
+
+              <div class="col-12 col-md-6">
+                <label class="form-label">Categorie</label>
+                <select
+                  class="form-select"
+                  [(ngModel)]="productForm.category"
+                  name="category"
+                  required
+                >
+                  <option value="">Choisir une categorie</option>
+                  <option value="Electronique">Electronique</option>
+                  <option value="Vetements">Vetements</option>
+                  <option value="Alimentation">Alimentation</option>
+                  <option value="Chaussures">Chaussures</option>
+                </select>
+              </div>
+
+              <div class="col-12 col-md-6">
+                <label class="form-label">Image principale</label>
+                <input
+                  type="file"
+                  class="form-control"
+                  name="image"
+                  required
+                  (change)="onImageSelected($event)"
+                >
+              </div>
+
+              <div class="col-12">
+                <label class="form-label">Description</label>
+                <textarea
+                  class="form-control"
+                  rows="4"
+                  placeholder="Description du produit"
+                  [(ngModel)]="productForm.description"
+                  name="description"
+                ></textarea>
+              </div>
+
+              <div class="col-12 col-md-6">
+                <label class="form-label">Unite de base</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Ex: prestation, kg, litre"
+                  [(ngModel)]="productForm.base_unity"
+                  name="base_unity"
+                >
+              </div>
+
+              <div class="col-12 col-md-6">
+                <label class="form-label">Quantite minimale de commande</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  placeholder="Ex: 1, 20, 100"
+                  [(ngModel)]="productForm.min_quantity"
+                  name="min_quantity"
+                  min="1"
+                  required
+                >
+              </div>
+
+              <div class="col-12 col-md-6">
+                <label class="form-label">Prix de vente</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  placeholder="Ex: 10000"
+                  [(ngModel)]="productForm.sale_price"
+                  name="sale_price"
+                  min="0"
+                  step="0.01"
+                  required
+                >
+              </div>
+            </div>
+
+            <hr class="my-4">
+
+            <h5>Attributs specifiques (optionnel)</h5>
+            <div class="row g-3 align-items-end mb-2" *ngFor="let attr of attributes; let i= index">
+              <div class="col-md-5">
+                <label class="form-label">Cle</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  [(ngModel)]="attributes[i].key"
+                  placeholder="Ex: Marque, Couleur ..."
+                  [name]="'attr_key_' + i"
+                >
+              </div>
+              <div class="col-md-5">
+                <label class="form-label">Valeur</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  [(ngModel)]="attributes[i].value"
+                  placeholder="Ex: Samsung, Rouge ..."
+                  [name]="'attr_value_' + i"
+                >
+              </div>
+              <div class="col-md-2 d-flex gap-2">
+                <button type="button" class="btn btn-outline-primary w-50" (click)="addAttributeRow()">+</button>
+                <button type="button" class="btn btn-outline-danger w-50" (click)="removeAttributeRow(i)">-</button>
+              </div>
+            </div>
+
+            <div class="mt-4 text-end">
+              <button type="reset" class="btn btn-outline-secondary me-2">Annuler</button>
+              <button type="submit" class="btn btn-primary" [disabled]="isSubmitting">
+                {{ isSubmitting ? 'Enregistrement...' : 'Enregistrer le produit' }}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
+  </div>
 </div>

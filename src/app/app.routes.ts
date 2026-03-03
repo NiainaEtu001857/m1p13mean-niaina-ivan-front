@@ -3,12 +3,18 @@ import { Login } from './page/login/login/login';
 import { Registre } from './page/login/registre/registre';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import { BoutiqueLayoutComponent } from './layouts/boutique-layout/boutique-layout.component';
+import { ClientLayoutComponent } from './layouts/client-layout/client-layout.component';
+import { AdminLoginComponent } from './page/admin/admin-login/admin-login.component';
+import { authGuard } from './auth-guard';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'login', pathMatch: 'full' },
+    { path: 'admin/login', component: AdminLoginComponent },
     {
         path: 'admin',
         component: AdminLayoutComponent,
+        canActivate: [authGuard],
+        data: { role: 'ADMIN' },
         children: [
             {
                 path:'',
@@ -50,7 +56,9 @@ export const routes: Routes = [
     },
     {
         path: 'boutiques',
-        component: BoutiqueLayoutComponent,
+        component: BoutiqueLayoutComponent,  
+        canActivate: [authGuard],
+        data: { role: 'SHOP' },
         children: [
             {
                 path:'',
@@ -93,6 +101,40 @@ export const routes: Routes = [
                 path:'commandes/historique',
                 loadComponent() {
                     return import('./page/boutiques/commandes-boutique/commandes-historique/commandes-historique.component').then(m => m.CommandesHistoriqueComponent);
+                }
+            },
+            {
+                path: 'produits/stocks/ajouter',
+                loadComponent()
+                {
+                    return import('./page/boutiques/stocks-boutique/ajouter/ajouter-stock.component').then(m => m.AjouterStockComponent);
+                },
+            },
+        ]
+    },
+    {
+        path: 'client',
+        component: ClientLayoutComponent,  
+        canActivate: [authGuard],
+        data: { role: 'CLIENT' },
+        children: [
+            {
+                path: '',
+                loadComponent() {
+                    return import('./page/client/choose-shop/choose-shop.component').then(m => m.ChooseShopComponent);
+                }   
+            },
+
+            {
+                path: 'shop/:id',
+                loadComponent() {
+                    return import('./page/client/list-product/list-product.component').then(m => m.ListProductComponent);
+                }
+            },
+            {
+                path: 'order/pending',
+                loadComponent() {
+                    return import('./page/client/order-pending/order-pending.component').then(m => m.OrderPendingComponent);
                 }
             }
         ]

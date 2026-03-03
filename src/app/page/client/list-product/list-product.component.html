@@ -1,0 +1,77 @@
+<app-cart></app-cart>
+<div class="container mt-4">
+
+  <div class="row g-4">
+    <div *ngFor="let service of services" class="col-6 col-md-4 col-lg-3">
+      <div class="card h-100 shadow-sm">
+
+        <!-- Image produit -->
+        <img [src]="resolveServicePhoto(service.photo)"
+             (error)="onServicePhotoError($event)"
+             class="card-img-top img-fluid"
+             style="height: 180px; object-fit: cover;"
+             alt="{{ service.name }}">
+
+        <div class="card-body d-flex flex-column">
+
+
+          <!-- Nom du produit -->
+          <h6 class="card-title text-truncate" title="{{ service.name }}">
+            {{ service.name }}
+          </h6>
+          <p>{{ service.sale_price}} €</p>
+
+          <span class="badge bg-secondary mb-1">{{ service.type }}</span>
+          <p class="mb-1 small text-muted">
+            Min: {{ service.min_quantity }} {{ service.base_unity }}
+          </p>
+
+          <p class="mb-2 small text-muted">
+            🏪 {{ shop?.name || 'Boutique' }}
+          </p>
+
+          <div class="mt-auto d-flex justify-content-between">
+            <button class="btn btn-sm btn-success" (click)="openQuantityModal(service)">
+              Ajouter au panier
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Pagination -->
+  <div class="d-flex justify-content-center mt-4" *ngIf="totalPages > 1">
+    <button class="btn btn-primary me-2" (click)="previousPage()" [disabled]="page === 1">
+      Précédent
+    </button>
+    <span class="align-self-center">Page {{ page }} / {{ totalPages }}</span>
+    <button class="btn btn-primary ms-2" (click)="nextPage()" [disabled]="page === totalPages">
+      Suivant
+    </button>
+  </div>
+
+</div>
+
+<div *ngIf="showQuantityModal" class="modal-overlay">
+  <div class="modal-card">
+    <div class="modal-header">
+      <h4 class="modal-title">🛒 Ajouter au panier</h4>
+      <button class="modal-close-btn" (click)="closeQuantityModal()" aria-label="Fermer">
+        <span class="fe fe-x"></span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p><strong>{{ selectedService?.name }}</strong></p>
+      <div class="quantity-input">
+        <label for="quantity">Quantité :</label>
+        <input id="quantity" type="number" [(ngModel)]="quantityToAdd" min="1">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" (click)="closeQuantityModal()">Annuler</button>
+      <button class="btn btn-success" (click)="addToCart()">Ajouter</button>
+    </div>
+  </div>
+</div>

@@ -25,95 +25,93 @@
       </div> <!-- / .header -->
 
       <!-- CARDS -->
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col-12 col-lg-6 col-xl">
 
-            <!-- Value  -->
+
+
+
+      <div class="container-fluid">
+        <div *ngIf="isLoading" class="alert alert-info" role="status">
+          Loading...
+        </div>
+
+        <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+          {{ errorMessage }}
+        </div>
+
+        <div class="row" *ngIf="!isLoading && !errorMessage">
+          <!-- Start card -->
+          <div class="col-12 col-lg-6 col-xl">
             <div class="card">
               <div class="card-body">
                 <div class="row align-items-center gx-0">
                   <div class="col">
-
-                    <!-- Title -->
                     <h6 class="text-uppercase text-body-secondary mb-2">
-                      Revenues
+                      Number of clients
                     </h6>
-
-                    <!-- Heading -->
                     <span class="h2 mb-0">
-                      $24,500
+                      {{ stats.nbrClient || 0 }}
                     </span>
                   </div>
                   <div class="col-auto">
-
-                    <!-- Icon -->
-                    <span class="h2 fe fe-dollar-sign text-body-secondary mb-0"></span>
-
+                    <span class="h2 fe fe-user text-body-secondary mb-0"></span>
                   </div>
                 </div> <!-- / .row -->
               </div>
             </div>
-
           </div>
           <div class="col-12 col-lg-6 col-xl">
-
-            <!-- Hours -->
             <div class="card">
               <div class="card-body">
                 <div class="row align-items-center gx-0">
                   <div class="col">
-
-                    <!-- Title -->
                     <h6 class="text-uppercase text-body-secondary mb-2">
-                      Total Boutique
+                      Number of products
                     </h6>
                     <span class="h2 mb-0">
-                      $24,500
+                      {{ stats.nbrService || 0 }}
                     </span>
                   </div>
                   <div class="col-auto">
                     <span class="h2 fe fe-box text-body-secondary mb-0"></span>
-
                   </div>
                 </div> <!-- / .row -->
               </div>
             </div>
-
           </div>
           <div class="col-12 col-lg-6 col-xl">
-
-            <!-- Exit -->
             <div class="card">
               <div class="card-body">
                 <div class="row align-items-center gx-0">
                   <div class="col">
-
-                    <!-- Title -->
                     <h6 class="text-uppercase text-body-secondary mb-2">
-                      Total Clients
+                      Number of shops
                     </h6>
-
-                    <!-- Heading -->
                     <span class="h2 mb-0">
-                      1000
+                      {{ stats.nbrShop || 0 }}
                     </span>
                   </div>
                   <div class="col-auto">
-                        <span class="h2 fe fe-users text-body-secondary mb-0"></span>
-                    </div>
+                    <span class="h2 fe fe-shopping-bag text-body-secondary mb-0"></span>
+                  </div>
                 </div> <!-- / .row -->
               </div>
             </div>
-
           </div>
+          <!-- End card -->
         </div> <!-- / .row -->
+
         <div class="row">
           <div class="col-12 col-xl-6">
-          <app-taux-revenu></app-taux-revenu>
+          <app-taux-revenu
+            [chartLabels]="stats.chartLabels"
+            [monthlyRevenue]="stats.monthlyRevenue"
+          ></app-taux-revenu>
           </div>
           <div class="col-12 col-xl-6">
-            <app-taux-revenu-mensuel></app-taux-revenu-mensuel>
+            <app-taux-revenu-mensuel
+              [chartLabels]="stats.chartLabels"
+              [monthlyNewClients]="stats.monthlyNewClients"
+            ></app-taux-revenu-mensuel>
           </div>
         </div> <!-- / .row -->
         <div class="row">
@@ -133,264 +131,37 @@
                   </div>
                 </div> <!-- / .row -->
               </div>
-              <div class="table-responsive mb-0" data-list="{&quot;valueNames&quot;: [&quot;goal-project&quot;, &quot;goal-status&quot;, &quot;goal-progress&quot;, &quot;goal-date&quot;]}">
+              <div class="table-responsive mb-0">
                 <table class="table table-sm table-nowrap card-table">
                   <thead>
                     <tr>
                       <th>
-                        <a href="#" class="text-body-secondary list-sort" data-sort="goal-project">
-                          Produit
-                        </a>
+                        Produit
                       </th>
                       <th>
-                        <a href="#" class="text-body-secondary list-sort" data-sort="goal-status">
-                          Prix
-                        </a>
+                        Prix
                       </th>
                       <th>
-                        <a href="#" class="text-body-secondary list-sort" data-sort="goal-progress">
-                            Quantité vendue
-                        </a>
+                        Quantité vendue
                       </th>
                       <th>
-                        <a href="#" class="text-body-secondary list-sort" data-sort="goal-date">
-                            Boutique
-                        </a>
+                        Boutique
                       </th>
                       <th class="text-end">
-                        Nombres de clients
+                        Nombre de clients
                       </th>
-                      <th></th>
                     </tr>
                   </thead>
-                  <tbody class="list">
-                    <tr>
-                      <td class="goal-project">
-                        Update the API
-                      </td>
-                      <td class="goal-status">
-                        <span class="text-warning">●</span> In progress
-                      </td>
-                      <td class="goal-progress">
-                        55%
-                      </td>
-                      <td class="goal-date">
-                        <time datetime="2018-10-24">07/24/18</time>
-                      </td>
-                      <td class="text-end">
-                        <div class="avatar-group">
-                          <a href="profile-posts.html" class="avatar avatar-xs" data-bs-toggle="tooltip" title="Dianna Smiley">
-                            <img src="assets/img/avatars/profiles/avatar-1.jpg" class="avatar-img rounded-circle" alt="...">
-                          </a>
-                          <a href="profile-posts.html" class="avatar avatar-xs" data-bs-toggle="tooltip" title="Ab Hadley">
-                            <img src="assets/img/avatars/profiles/avatar-2.jpg" class="avatar-img rounded-circle" alt="...">
-                          </a>
-                          <a href="profile-posts.html" class="avatar avatar-xs" data-bs-toggle="tooltip" title="Adolfo Hess">
-                            <img src="assets/img/avatars/profiles/avatar-3.jpg" class="avatar-img rounded-circle" alt="...">
-                          </a>
-                          <a href="profile-posts.html" class="avatar avatar-xs" data-bs-toggle="tooltip" title="Daniela Dewitt">
-                            <img src="assets/img/avatars/profiles/avatar-4.jpg" class="avatar-img rounded-circle" alt="...">
-                          </a>
-                        </div>
-                      </td>
-                      <td class="text-end">
-                        <div class="dropdown">
-                          <a href="#" class="dropdown-ellipses dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fe fe-more-vertical"></i>
-                          </a>
-                          <div class="dropdown-menu dropdown-menu-end">
-                            <a href="#!" class="dropdown-item">
-                              Action
-                            </a>
-                            <a href="#!" class="dropdown-item">
-                              Another action
-                            </a>
-                            <a href="#!" class="dropdown-item">
-                              Something else here
-                            </a>
-                          </div>
-                        </div>
-                      </td>
+                  <tbody>
+                    <tr *ngFor="let item of stats.topSellingProducts">
+                      <td>{{ item.product }}</td>
+                      <td>{{ item.price | number:'1.2-2' }}</td>
+                      <td>{{ item.quantitySold }}</td>
+                      <td>{{ item.shop }}</td>
+                      <td class="text-end">{{ item.clientCount }}</td>
                     </tr>
-                    <tr>
-                      <td class="goal-project">
-                        Release v1.2-Beta
-                      </td>
-                      <td class="goal-status">
-                        <span class="text-warning">●</span> In progress
-                      </td>
-                      <td class="goal-progress">
-                        25%
-                      </td>
-                      <td class="goal-date">
-                        <time datetime="2018-10-24">08/26/18</time>
-                      </td>
-                      <td class="text-end">
-                        <div class="avatar-group justify-content-end">
-                          <a href="#!" class="avatar avatar-xs" data-bs-toggle="tooltip" title="Dianna Smiley">
-                            <img src="assets/img/avatars/profiles/avatar-1.jpg" class="avatar-img rounded-circle" alt="...">
-                          </a>
-                          <a href="#!" class="avatar avatar-xs" data-bs-toggle="tooltip" title="Ab Hadley">
-                            <img src="assets/img/avatars/profiles/avatar-2.jpg" class="avatar-img rounded-circle" alt="...">
-                          </a>
-                          <a href="#!" class="avatar avatar-xs" data-bs-toggle="tooltip" title="Adolfo Hess">
-                            <img src="assets/img/avatars/profiles/avatar-3.jpg" class="avatar-img rounded-circle" alt="...">
-                          </a>
-                        </div>
-                      </td>
-                      <td class="text-end">
-                        <div class="dropdown">
-                          <a href="#" class="dropdown-ellipses dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fe fe-more-vertical"></i>
-                          </a>
-                          <div class="dropdown-menu dropdown-menu-end">
-                            <a href="#!" class="dropdown-item">
-                              Action
-                            </a>
-                            <a href="#!" class="dropdown-item">
-                              Another action
-                            </a>
-                            <a href="#!" class="dropdown-item">
-                              Something else here
-                            </a>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td class="goal-project">
-                        GDPR Compliance
-                      </td>
-                      <td class="goal-status">
-                        <span class="text-success">●</span> Completed
-                      </td>
-                      <td class="goal-progress">
-                        100%
-                      </td>
-                      <td class="goal-date">
-                        <time datetime="2018-10-24">06/19/18</time>
-                      </td>
-                      <td class="text-end">
-                        <div class="avatar-group justify-content-end">
-                          <a href="#!" class="avatar avatar-xs" data-bs-toggle="tooltip" title="Dianna Smiley">
-                            <img src="assets/img/avatars/profiles/avatar-1.jpg" class="avatar-img rounded-circle" alt="...">
-                          </a>
-                          <a href="#!" class="avatar avatar-xs" data-bs-toggle="tooltip" title="Ab Hadley">
-                            <img src="assets/img/avatars/profiles/avatar-2.jpg" class="avatar-img rounded-circle" alt="...">
-                          </a>
-                          <a href="#!" class="avatar avatar-xs" data-bs-toggle="tooltip" title="Adolfo Hess">
-                            <img src="assets/img/avatars/profiles/avatar-3.jpg" class="avatar-img rounded-circle" alt="...">
-                          </a>
-                        </div>
-                      </td>
-                      <td class="text-end">
-                        <div class="dropdown">
-                          <a href="#" class="dropdown-ellipses dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fe fe-more-vertical"></i>
-                          </a>
-                          <div class="dropdown-menu dropdown-menu-end">
-                            <a href="#!" class="dropdown-item">
-                              Action
-                            </a>
-                            <a href="#!" class="dropdown-item">
-                              Another action
-                            </a>
-                            <a href="#!" class="dropdown-item">
-                              Something else here
-                            </a>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td class="goal-project">
-                        v1.2 Documentation
-                      </td>
-                      <td class="goal-status">
-                        <span class="text-danger">●</span> Cancelled
-                      </td>
-                      <td class="goal-progress">
-                        0%
-                      </td>
-                      <td class="goal-date">
-                        <time datetime="2018-10-24">06/25/18</time>
-                      </td>
-                      <td class="text-end">
-                        <div class="avatar-group justify-content-end">
-                          <a href="#!" class="avatar avatar-xs" data-bs-toggle="tooltip" title="Dianna Smiley">
-                            <img src="assets/img/avatars/profiles/avatar-1.jpg" class="avatar-img rounded-circle" alt="...">
-                          </a>
-                          <a href="#!" class="avatar avatar-xs" data-bs-toggle="tooltip" title="Ab Hadley">
-                            <img src="assets/img/avatars/profiles/avatar-2.jpg" class="avatar-img rounded-circle" alt="...">
-                          </a>
-                        </div>
-                      </td>
-                      <td class="text-end">
-                        <div class="dropdown">
-                          <a href="#" class="dropdown-ellipses dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="fe fe-more-vertical"></span>
-                          </a>
-                          <div class="dropdown-menu dropdown-menu-end">
-                            <a href="#!" class="dropdown-item">
-                              Action
-                            </a>
-                            <a href="#!" class="dropdown-item">
-                              Another action
-                            </a>
-                            <a href="#!" class="dropdown-item">
-                              Something else here
-                            </a>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td class="goal-project">
-                        Plan design offsite
-                      </td>
-                      <td class="goal-status">
-                        <span class="text-success">●</span> Completed
-                      </td>
-                      <td class="goal-progress">
-                        100%
-                      </td>
-                      <td class="goal-date">
-                        <time datetime="2018-10-24">06/30/18</time>
-                      </td>
-                      <td class="text-end">
-                        <div class="avatar-group justify-content-end">
-                          <a href="#!" class="avatar avatar-xs" data-bs-toggle="tooltip" title="Dianna Smiley">
-                            <img src="assets/img/avatars/profiles/avatar-1.jpg" class="avatar-img rounded-circle" alt="...">
-                          </a>
-                          <a href="#!" class="avatar avatar-xs" data-bs-toggle="tooltip" title="Ab Hadley">
-                            <img src="assets/img/avatars/profiles/avatar-2.jpg" class="avatar-img rounded-circle" alt="...">
-                          </a>
-                          <a href="#!" class="avatar avatar-xs" data-bs-toggle="tooltip" title="Adolfo Hess">
-                            <img src="assets/img/avatars/profiles/avatar-3.jpg" class="avatar-img rounded-circle" alt="...">
-                          </a>
-                          <a href="#!" class="avatar avatar-xs" data-bs-toggle="tooltip" title="Daniela Dewitt">
-                            <img src="assets/img/avatars/profiles/avatar-4.jpg" class="avatar-img rounded-circle" alt="...">
-                          </a>
-                        </div>
-                      </td>
-                      <td class="text-end">
-                        <div class="dropdown">
-                          <a href="#" class="dropdown-ellipses dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fe fe-more-vertical"></i>
-                          </a>
-                          <div class="dropdown-menu dropdown-menu-end">
-                            <a href="#!" class="dropdown-item">
-                              Action
-                            </a>
-                            <a href="#!" class="dropdown-item">
-                              Another action
-                            </a>
-                            <a href="#!" class="dropdown-item">
-                              Something else here
-                            </a>
-                          </div>
-                        </div>
-                      </td>
+                    <tr *ngIf="(stats.topSellingProducts?.length || 0) === 0">
+                      <td colspan="5" class="text-center py-4">Aucune vente disponible.</td>
                     </tr>
                   </tbody>
                 </table>

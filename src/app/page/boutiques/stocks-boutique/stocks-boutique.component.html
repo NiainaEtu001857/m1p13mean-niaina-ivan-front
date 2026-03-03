@@ -1,8 +1,6 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-12">
-
-      <!-- Header -->
       <div class="header">
         <div class="header-body">
           <div class="row align-items-center">
@@ -12,7 +10,7 @@
             </div>
 
             <div class="col-auto">
-              <a routerLink="/admin/add-product" class="btn btn-primary">
+              <a routerLink="/boutiques/produits/stocks/ajouter" class="btn btn-primary">
                 + Ajouter un produit
               </a>
             </div>
@@ -20,111 +18,94 @@
         </div>
       </div>
 
-      <!-- Card -->
       <div class="card">
-
-        <!-- Card header -->
         <div class="card-header">
           <div class="row align-items-center">
-
             <div class="col">
               <input
                 type="search"
                 class="form-control"
                 placeholder="Rechercher un produit..."
                 [(ngModel)]="searchText"
+                (ngModelChange)="applyFilter()"
               >
             </div>
 
             <div class="col-auto">
-              <select class="form-select form-select-sm">
-                <option>Toutes catégories</option>
-                <option>Électronique</option>
-                <option>Vêtements</option>
-                <option>Chaussures</option>
-                <option>Alimentation</option>
+              <select
+                class="form-select form-select-sm"
+                [(ngModel)]="selectedType"
+                (ngModelChange)="applyFilter()"
+              >
+                <option value="">Tous les types</option>
+                <option *ngFor="let type of typeOptions" [value]="type">{{ type }}</option>
               </select>
             </div>
-
           </div>
         </div>
 
-        <!-- Table -->
         <div class="table-responsive">
           <table class="table table-hover table-nowrap card-table">
             <thead>
               <tr>
-                <th>ID</th>
-                <th>Produit</th>
-                <th>Catégorie</th>
-                <th>Marque</th>
-                <th>Prix</th>
-                <th>Stock</th>
+                <th>Reference</th>
+                <th>Service</th>
+                <th>Type</th>
+                <th>Quantite</th>
                 <th>Statut</th>
-                <th class="text-end">Actions</th>
+                <th>Date</th>
               </tr>
             </thead>
 
             <tbody>
-              <tr *ngFor="let p of products; let i = index">
+              <tr *ngIf="isLoading">
+                <td colspan="6" class="text-center py-4">Chargement des stocks...</td>
+              </tr>
 
-                <td class="fw-semibold">{{ p.id }}</td>
+              <tr *ngIf="!isLoading && errorMessage">
+                <td colspan="6" class="text-center text-danger py-4">{{ errorMessage }}</td>
+              </tr>
 
-                <td>{{ p.name }}</td>
+              <tr *ngIf="!isLoading && !errorMessage && filteredStocks.length === 0">
+                <td colspan="6" class="text-center py-4">Aucun stock trouve.</td>
+              </tr>
 
-                <td>{{ p.category }}</td>
-
-                <td>{{ p.brand }}</td>
-
-                <td>{{ p.price | currency:'EUR' }}</td>
-
+              <tr *ngFor="let p of filteredStocks">
+                <td>{{ p.service?.ref || '-' }}</td>
+                <td>{{ p.service?.name || '-' }}</td>
+                <td>{{ p.service?.type || '-' }}</td>
+                <td>{{ p.quantity }}</td>
                 <td>
                   <span
                     class="badge"
                     [ngClass]="{
-                      'bg-success': p.stock > 5,
-                      'bg-warning': p.stock > 0 && p.stock <= 5,
-                      'bg-danger': p.stock === 0
+                      'bg-success': p.quantity > 0,
+                      'bg-secondary': p.quantity <= 0
                     }"
                   >
-                    {{ p.stock }}
+                    {{ getStatusLabel(p.quantity) }}
                   </span>
                 </td>
-
-                <td>
-                  <span
-                    class="badge"
-                    [ngClass]="{
-                      'bg-success': p.status === 'actif',
-                      'bg-secondary': p.status === 'inactif'
-                    }"
-                  >
-                    {{ p.status }}
-                  </span>
-                </td>
-
-                <td class="text-end">
-                  <button class="btn btn-sm btn-outline-primary me-1"
-                          (click)="viewProduct(p)">
-                    <i class="fe fe-eye"></i>
-                  </button>
-
-                  <button class="btn btn-sm btn-outline-warning me-1"
-                          (click)="editProduct(p)">
-                    <i class="fe fe-edit"></i>
-                  </button>
-
-                  <button class="btn btn-sm btn-outline-danger"
-                          (click)="deleteProduct(i)">
-                    <i class="fe fe-trash"></i>
-                  </button>
-                </td>
-
+                <td>{{ p.date | date:'EEEE d MMMM y, HH:mm':'':'fr-FR' }}</td>
               </tr>
             </tbody>
           </table>
         </div>
 
+        <div class="card-footer d-flex justify-content-between align-items-center">
+          <small class="text-muted">Affichage {{ filteredStocks.length }} sur {{ totalItems || filteredStocks.length }}</small>
+          <div class="btn-group btn-group-sm">
+            <button type="button" class="btn btn-outline-secondary" (click)="previousPage()" [disabled]="page <= 1 || isLoading">
+              Prev
+            </button>
+            <button type="button" class="btn btn-outline-secondary" disabled>
+              Page {{ page }} / {{ totalPages || 1 }}
+            </button>
+            <button type="button" class="btn btn-outline-secondary" (click)="nextPage()" [disabled]="page >= totalPages || isLoading || totalPages <= 1">
+              Next
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </div>

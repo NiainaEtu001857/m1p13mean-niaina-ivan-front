@@ -1,0 +1,24 @@
+.main-content {
+  position: relative;
+}
+
+.client-top-layer {
+  position: sticky;
+  top: 0;
+  z-index: 1100;
+}
+
+.client-cart-navbar {
+  position: relative;
+  z-index: 1101;
+}
+
+.cart-dropdown {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 1rem;
+  width: min(300px, calc(100vw - 2rem));
+  max-height: min(70vh, 560px);
+  overflow-y: auto;
+  z-index: 1102;
+}

@@ -60,6 +60,5 @@ export class ProductPropertiesComponent {
 
   submitProperties() {
     console.log('Properties saved:', this.properties);
-    // Ici tu peux envoyer vers le backend ou router vers la page suivante
   }
 }

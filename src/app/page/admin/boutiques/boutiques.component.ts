@@ -23,17 +23,16 @@ export class BoutiquesComponent {
       {
         data: [1200, 1500, 1000, 1800, 1700, 2000, 2100, 1900, 2200, 2300, 2500, 2700],
         label: 'Revenu Mensuel (€)',
-        fill: false,              // pas de remplissage sous la ligne
-        borderColor: '#42A5F5',   // couleur de la ligne
-        backgroundColor: '#42A5F5', // couleur des points
-        tension: 0.3,             // courbure de la ligne
-        pointRadius: 5,           // taille des points
+        fill: false,
+        borderColor: '#42A5F5',
+        backgroundColor: '#42A5F5',
+        tension: 0.3,
+        pointRadius: 5,
         pointHoverRadius: 7,
       }
     ]
   };
 
-  // Options du graphique
   public lineChartOptions: ChartOptions<'line'> = {
     responsive: true,
     plugins: {
@@ -46,6 +45,5 @@ export class BoutiquesComponent {
     }
   };
 
-  // Type de graphique
   public lineChartType: 'line' = 'line';
 }

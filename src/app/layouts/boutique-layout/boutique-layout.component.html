@@ -27,8 +27,6 @@
     
             <!-- Menu -->
             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="sidebarIcon">
-                <a href="./profile-posts.html" class="dropdown-item">Profile</a>
-                <a href="./account-general.html" class="dropdown-item">Settings</a>
                 <hr class="dropdown-divider">
                 <a href="./sign-in.html" class="dropdown-item">Logout</a>
             </div>
@@ -64,11 +62,6 @@
                 </a>
                 <div class="collapse " id="sidebarCommande">
                   <ul class="nav nav-sm flex-column">
-                    <li>
-                      <a [routerLink]="['/boutiques/commandes']" class="nav-link">
-                        Actifs
-                      </a>
-                    </li>
                     <li>
                       <a [routerLink]="['/boutiques/commandes/ajouter']" class="nav-link">
                         Ajouter
@@ -133,22 +126,23 @@
                 </a>
     
                 <!-- Dropup -->
-                <div class="dropup">
-    
-                <!-- Toggle -->
-                <a href="#" id="sidebarIconCopy" class="dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <div class="avatar avatar-sm avatar-online">
+                <div class="dropup" style="position: relative;">
+                  <!-- Toggle -->
+                  <div (click)="toggleDropdown()" class="avatar avatar-sm avatar-online" style="cursor: pointer;">
                     <img src="./assets/img/avatars/profiles/avatar-1.jpg" class="avatar-img rounded-circle" alt="...">
-                    </div>
-                </a>
-    
-                <div class="dropdown-menu" aria-labelledby="sidebarIconCopy">
-                    <a href="./profile-posts.html" class="dropdown-item">Profile</a>
-                    <a href="./account-general.html" class="dropdown-item">Settings</a>
+                  </div>
+
+                  <!-- Menu -->
+                  <div 
+                    class="dropdown-menu" 
+                    [class.show]="isDropdownOpen" 
+                    style="position: absolute; bottom: 100%; left: 0;"
+                  >
+                    <!-- <a href="./profile-posts.html" class="dropdown-item">Profile</a>
+                    <a href="./account-general.html" class="dropdown-item">Settings</a> -->
                     <hr class="dropdown-divider">
-                    <a href="./sign-in.html" class="dropdown-item">Logout</a>
-                </div>
-    
+                    <button type="button" (click)="onLogout()" class="dropdown-item">Logout</button>
+                  </div>
                 </div>
     
                 <!-- Icon -->

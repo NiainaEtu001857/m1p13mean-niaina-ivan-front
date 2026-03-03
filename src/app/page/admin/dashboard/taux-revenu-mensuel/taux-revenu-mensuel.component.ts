@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { BaseChartDirective } from 'ng2-charts';
 import { Chart, ChartData, ChartOptions, LineController, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
 Chart.register(LineController, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
@@ -10,28 +10,43 @@ Chart.register(LineController, CategoryScale, LinearScale, PointElement, LineEle
   styleUrl: './taux-revenu-mensuel.component.css',
 })
 export class TauxRevenuMensuelComponent {
-  public lineChartLabels: string[] = [
-      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
-      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
-    ];
+  private defaultLabels: string[] = ['Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Jun', 'Jul', 'Aou', 'Sep', 'Oct', 'Nov', 'Dec'];
+  private defaultNewClients: number[] = [8, 12, 10, 15, 14, 18, 16, 20, 22, 19, 24, 26];
 
-    public lineChartData: ChartData<'line'> = {
+  public lineChartLabels: string[] = this.defaultLabels;
+
+  public lineChartData: ChartData<'line'> = {
     labels: this.lineChartLabels,
     datasets: [
       {
-        data: [1200, 1500, 1000, 1800, 1700, 2000, 2100, 1900, 2200, 2300, 2500, 2700],
-        label: 'Revenu Mensuel (€)',
-        fill: false,              // pas de remplissage sous la ligne
-        borderColor: '#42A5F5',   // couleur de la ligne
-        backgroundColor: '#42A5F5', // couleur des points
-        tension: 0.3,             // courbure de la ligne
-        pointRadius: 5,           // taille des points
+        data: this.defaultNewClients,
+        label: 'Nouveaux clients',
+        fill: false,
+        borderColor: '#42A5F5',
+        backgroundColor: '#42A5F5',
+        tension: 0.3,
+        pointRadius: 5,
         pointHoverRadius: 7,
       }
     ]
   };
 
-  // Options du graphique
+  @Input() set chartLabels(value: string[] | undefined) {
+    if (Array.isArray(value) && value.length > 0) {
+      this.lineChartData.labels = value;
+    } else {
+      this.lineChartData.labels = this.defaultLabels;
+    }
+  }
+
+  @Input() set monthlyNewClients(value: number[] | undefined) {
+    if (Array.isArray(value) && value.length > 0) {
+      this.lineChartData.datasets[0].data = value;
+    } else {
+      this.lineChartData.datasets[0].data = this.defaultNewClients;
+    }
+  }
+
   public lineChartOptions: ChartOptions<'line'> = {
     responsive: true,
     plugins: {
@@ -44,6 +59,5 @@ export class TauxRevenuMensuelComponent {
     }
   };
 
-  // Type de graphique
   public lineChartType: 'line' = 'line';
 }

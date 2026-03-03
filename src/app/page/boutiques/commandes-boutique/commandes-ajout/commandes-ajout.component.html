@@ -1,32 +1,24 @@
 <div class="container-fluid">
   <div class="row justify-content-center">
     <div class="col-12 col-md-10">
-
-      <!-- Header -->
       <div class="header mb-4">
         <h6 class="header-pretitle">Admin Dashboard</h6>
         <h1 class="header-title">Ajouter une commande</h1>
       </div>
 
-      <!-- Card -->
       <div class="card">
         <div class="card-body">
           <form #orderForm="ngForm" (ngSubmit)="submit(orderForm)" class="row g-3">
-
-            <!-- ID Commande -->
             <div class="col-md-4">
-              <label class="form-label">ID Commande</label>
-              <input
-                type="text"
-                class="form-control"
-                required
-                [(ngModel)]="order.id"
-                name="id"
-                placeholder="Ex: CMD-1004"
-              >
+              <label class="form-label">Statut</label>
+              <select class="form-select" [(ngModel)]="order.status" name="status" required>
+                <option value="pending">En attente</option>
+                <option value="confirmed">Confirmee</option>
+                <option value="delivered">Expediee</option>
+                <option value="cancelled">Annulee</option>
+              </select>
             </div>
 
-            <!-- Date -->
             <div class="col-md-4">
               <label class="form-label">Date</label>
               <input
@@ -38,82 +30,63 @@
               >
             </div>
 
-            <!-- Statut -->
-            <div class="col-md-4">
-              <label class="form-label">Statut</label>
-              <select class="form-select" [(ngModel)]="order.status" name="status" required>
-                <option value="En attente">En attente</option>
-                <option value="Confirmée">Confirmée</option>
-                <option value="Expédiée">Expédiée</option>
-                <option value="Annulée">Annulée</option>
+            <hr class="my-3 w-100">
+
+            <div class="col-md-6">
+              <label class="form-label">Client</label>
+              <select [(ngModel)]="order.clientId" name="clientId" class="form-select" required>
+                <option *ngFor="let client of clients" [value]="client._id">
+                  {{ client.first_name }} - {{ client.email }}
+                </option>
               </select>
             </div>
 
             <hr class="my-3 w-100">
 
-            <!-- Client -->
-            <div class="col-md-6">
-              <label class="form-label">Nom du client</label>
-              <input
-                type="text"
-                class="form-control"
-                [(ngModel)]="order.customer.name"
-                name="customerName"
-                placeholder="Jean Dupont"
-                required
-              >
-            </div>
-
-            <div class="col-md-6">
-              <label class="form-label">Email du client</label>
-              <input
-                type="email"
-                class="form-control"
-                [(ngModel)]="order.customer.email"
-                name="customerEmail"
-                placeholder="jean@gmail.com"
-                required
-              >
-            </div>
-
-            <hr class="my-3 w-100">
-
-            <!-- Ajouter un article -->
             <div class="col-12">
               <h5>Articles</h5>
             </div>
 
             <div class="col-md-4">
-              <input type="text" class="form-control" placeholder="Nom article" [(ngModel)]="newItem.name" name="newItemName">
+              <label class="form-label">Service</label>
+              <select class="form-select" [(ngModel)]="newItem.serviceId" name="serviceId">
+                <option *ngFor="let service of services" [value]="service._id">
+                  {{ service.name }} - {{ service.sale_price || 0 }} Ar
+                </option>
+              </select>
             </div>
+
             <div class="col-md-3">
-              <input type="number" class="form-control" placeholder="Quantité" [(ngModel)]="newItem.quantity" name="newItemQuantity" min="1">
+              <label class="form-label">Quantite</label>
+              <input type="number" class="form-control" [(ngModel)]="newItem.quantity" name="quantity" min="1">
             </div>
+
             <div class="col-md-3">
-              <input type="number" class="form-control" placeholder="Prix" [(ngModel)]="newItem.price" name="newItemPrice" min="0.01" step="0.01">
+              <label class="form-label">Prix unitaire</label>
+              <input type="text" class="form-control" [value]="selectedServicePrice | number:'1.0-2':'fr-FR'" readonly>
             </div>
-            <div class="col-md-2">
+
+            <div class="col-md-2 d-flex align-items-end">
               <button type="button" class="btn btn-primary w-100" (click)="addItem()">Ajouter</button>
             </div>
 
-            <!-- Liste des articles -->
-            <div class="col-12">
-              <table class="table table-hover mt-2">
+            <div class="col-12 mt-3">
+              <table class="table table-hover">
                 <thead>
                   <tr>
-                    <th>Article</th>
-                    <th>Quantité</th>
-                    <th>Prix</th>
+                    <th>Service</th>
+                    <th>Quantite</th>
+                    <th>Prix unitaire</th>
                     <th>Total</th>
                     <th></th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr *ngFor="let item of order.items; let i = index">
-                    <td>{{ item.name }}</td>
+                    <td>{{ item.serviceName }}</td>
                     <td>{{ item.quantity }}</td>
-                    <td>{{ item.price | currency:'EUR' }}</td>
-                    <td>{{ (item.quantity * item.price) | currency:'EUR' }}</td>
+                    <td>{{ item.unitPrice }}</td>
+                    <td>{{ item.totalPrice }}</td>
                     <td>
                       <button type="button" class="btn btn-sm btn-danger" (click)="removeItem(i)">
                         Supprimer
@@ -124,17 +97,14 @@
               </table>
             </div>
 
-            <!-- Total commande -->
             <div class="col-12 text-end">
-              <h5>Total : {{ order.total | currency:'EUR' }}</h5>
+              <h5>Total : {{ order.total }}</h5>
             </div>
 
-            <!-- Boutons -->
             <div class="col-12 text-end">
               <button type="reset" class="btn btn-outline-secondary me-2">Annuler</button>
               <button type="submit" class="btn btn-primary">Enregistrer la commande</button>
             </div>
-
           </form>
         </div>
       </div>
