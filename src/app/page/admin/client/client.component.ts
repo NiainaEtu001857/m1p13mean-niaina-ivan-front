@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ClientCardComponent } from './client-card/client-card.component';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
@@ -18,6 +18,7 @@ type Client = {
   imports: [CommonModule, ClientCardComponent],
   templateUrl: './client.component.html',
   styleUrl: './client.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ClientComponent implements OnInit {
   clients: Client[] = [];
@@ -30,7 +31,7 @@ export class ClientComponent implements OnInit {
   totalItems = 0;
   deletingClientId: string | null = null;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.loadClients();
@@ -40,6 +41,7 @@ export class ClientComponent implements OnInit {
     const token = localStorage.getItem('token');
     if (!token) {
       this.errorMessage = 'Vous devez vous connecter.';
+      this.cdr.markForCheck();
       return;
     }
 
@@ -75,6 +77,7 @@ export class ClientComponent implements OnInit {
       this.totalItems = 0;
     } finally {
       this.isLoading = false;
+      this.cdr.markForCheck();
     }
   }
 
@@ -116,6 +119,7 @@ export class ClientComponent implements OnInit {
     const clientId = client._id || (typeof client.id === 'string' ? client.id : '');
     if (!clientId) {
       this.errorMessage = 'ID client manquant.';
+      this.cdr.markForCheck();
       return;
     }
 
@@ -128,6 +132,7 @@ export class ClientComponent implements OnInit {
     const token = localStorage.getItem('token');
     if (!token) {
       this.errorMessage = 'Vous devez vous connecter.';
+      this.cdr.markForCheck();
       return;
     }
 
@@ -152,6 +157,7 @@ export class ClientComponent implements OnInit {
       this.errorMessage = error?.error?.message || error?.error?.error || 'Erreur suppression client';
     } finally {
       this.deletingClientId = null;
+      this.cdr.markForCheck();
     }
   }
 }

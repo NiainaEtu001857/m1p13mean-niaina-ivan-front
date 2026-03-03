@@ -1,6 +1,5 @@
 import { Component, HostListener } from '@angular/core';
 import { Router, RouterModule, RouterOutlet } from "@angular/router";
-import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../page/login/auth.service';
 
@@ -15,7 +14,11 @@ import { AuthService } from '../../page/login/auth.service';
   styleUrl: './admin-layout.component.css',
 })
 export class AdminLayoutComponent {
-  constructor(private authService: AuthService, private http: HttpClient , private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private http: HttpClient,
+    private router: Router
+  ) {}
 
   onLogout() {
     try {
@@ -41,4 +44,3 @@ export class AdminLayoutComponent {
     }
   }
 }
-

@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
 import { timeout } from 'rxjs/operators';
@@ -12,6 +12,7 @@ import { environment } from '../../../../../environments/environment';
   imports: [CommonModule, FormsModule],
   templateUrl: './ajouter.component.html',
   styleUrl: './ajouter.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AjouterComponent {
   isSubmitting = false;
@@ -27,7 +28,7 @@ export class AjouterComponent {
     base_unity: '',
   };
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private cdr: ChangeDetectorRef) {}
 
   onImageSelected(event: Event) {
     const input = event.target as HTMLInputElement;
@@ -60,6 +61,7 @@ export class AjouterComponent {
     const token = localStorage.getItem('token');
     if (!token) {
       alert('Vous devez vous connecter.');
+      this.cdr.markForCheck();
       return;
     }
 
@@ -130,14 +132,18 @@ export class AjouterComponent {
         base_unity: 'piece',
       };
       this.attributes = [{ key: '', value: '' }];
+      this.cdr.markForCheck();
     } catch (error: any) {
       if (error?.name === 'TimeoutError') {
         alert("Errur serveur");
+        this.cdr.markForCheck();
         return;
       }
       alert(error?.error?.message || error?.error?.error || 'Erreur serveur');
+      this.cdr.markForCheck();
     } finally {
       this.isSubmitting = false;
+      this.cdr.markForCheck();
     }
   }
 }

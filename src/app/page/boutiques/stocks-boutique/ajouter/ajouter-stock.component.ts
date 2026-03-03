@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
 import { environment } from '../../../../../environments/environment';
@@ -10,6 +10,7 @@ import { environment } from '../../../../../environments/environment';
   imports: [CommonModule, FormsModule],
   templateUrl: './ajouter-stock.component.html',
   styleUrl: './ajouter-stock.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AjouterStockComponent implements OnInit {
   services: any[] = [];
@@ -20,7 +21,7 @@ export class AjouterStockComponent implements OnInit {
     quantity: 0
   };
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.loadServices();
@@ -30,6 +31,7 @@ export class AjouterStockComponent implements OnInit {
     const token = localStorage.getItem('token');
     if (!token) {
       alert('Vous devez vous connecter.');
+      this.cdr.markForCheck();
       return;
     }
 
@@ -46,6 +48,7 @@ export class AjouterStockComponent implements OnInit {
       alert(error?.error?.message || error?.error?.error || 'Erreur chargement services');
     } finally {
       this.isLoadingServices = false;
+      this.cdr.markForCheck();
     }
   }
 
@@ -90,8 +93,10 @@ export class AjouterStockComponent implements OnInit {
         service: '',
         quantity: 0
       };
+      this.cdr.markForCheck();
     } catch (error: any) {
       alert(error?.error?.message || error?.error?.error || 'Erreur serveur');
+      this.cdr.markForCheck();
     }
   }
 }

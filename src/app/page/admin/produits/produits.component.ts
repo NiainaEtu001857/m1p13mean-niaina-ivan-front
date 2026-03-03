@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -33,6 +33,7 @@ type Service = {
   imports: [CommonModule, RouterLink],
   templateUrl: './produits.component.html',
   styleUrl: './produits.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProduitsComponent implements OnInit {
   services: Service[] = [];
@@ -44,7 +45,7 @@ export class ProduitsComponent implements OnInit {
   totalPages = 0;
   totalItems = 0;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.loadServices();
@@ -54,6 +55,7 @@ export class ProduitsComponent implements OnInit {
     const token = localStorage.getItem('token');
     if (!token) {
       this.errorMessage = 'Vous devez vous connecter.';
+      this.cdr.markForCheck();
       return;
     }
 
@@ -89,6 +91,7 @@ export class ProduitsComponent implements OnInit {
       this.totalItems = 0;
     } finally {
       this.isLoading = false;
+      this.cdr.markForCheck();
     }
   }
 

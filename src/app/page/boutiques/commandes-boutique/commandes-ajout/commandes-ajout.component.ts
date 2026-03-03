@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { OrderService } from '../../../../services/order';
 
 @Component({ selector: 'app-commandes-ajout', imports: [CommonModule, FormsModule],
   templateUrl: './commandes-ajout.component.html',
-  styleUrls: ['./commandes-ajout.component.css']
+  styleUrls: ['./commandes-ajout.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CommandesAjoutComponent implements OnInit {
   order: any = {
@@ -23,7 +24,7 @@ export class CommandesAjoutComponent implements OnInit {
 
   shopId: string = '';
 
-  constructor(private orderService: OrderService) {}
+  constructor(private orderService: OrderService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     const storedUser = localStorage.getItem('user');
@@ -36,9 +37,15 @@ export class CommandesAjoutComponent implements OnInit {
       }
     }
 
-    this.orderService.getClients().subscribe(clients => this.clients = clients);
+    this.orderService.getClients().subscribe(clients => {
+      this.clients = clients;
+      this.cdr.markForCheck();
+    });
     if (this.shopId) {
-      this.orderService.getServicesByShop(this.shopId).subscribe(services => this.services = services);
+      this.orderService.getServicesByShop(this.shopId).subscribe(services => {
+        this.services = services;
+        this.cdr.markForCheck();
+      });
     }
   }
 
@@ -66,10 +73,12 @@ export class CommandesAjoutComponent implements OnInit {
         this.calculateTotal();
         this.newItem = { serviceId: '', quantity: 1 };
         this.isCheckingStock = false;
+        this.cdr.markForCheck();
       },
       error: (err) => {
         this.isCheckingStock = false;
         alert('Le service ou produits est en rupture de stock.');
+        this.cdr.markForCheck();
       }
     });
   }
@@ -100,10 +109,12 @@ export class CommandesAjoutComponent implements OnInit {
         alert('Commande ajoutée avec succès !');
         this.order = { items: [], total: 0, status: 'pending', clientId: '' };
         form.resetForm();
+        this.cdr.markForCheck();
       },
       error: err => {
         console.error(err);
         alert('Erreur lors de la création de la commande.');
+        this.cdr.markForCheck();
       }
     });
   }
