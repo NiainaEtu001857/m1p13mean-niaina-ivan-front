@@ -54,7 +54,7 @@ export class ProduitsComponent implements OnInit {
   async loadServices() {
     const token = localStorage.getItem('token');
     if (!token) {
-      this.errorMessage = 'Vous devez vous connecter.';
+      this.errorMessage = 'You must be logged in.';
       this.cdr.markForCheck();
       return;
     }
@@ -85,7 +85,7 @@ export class ProduitsComponent implements OnInit {
         this.totalPages = Math.max(Number(response?.totalPages) || 1, 1);
       }
     } catch (error: any) {
-      this.errorMessage = error?.error?.message || error?.error?.error || 'Erreur chargement services';
+      this.errorMessage = error?.error?.message || error?.error?.error || 'Error loading products';
       this.services = [];
       this.totalPages = 0;
       this.totalItems = 0;

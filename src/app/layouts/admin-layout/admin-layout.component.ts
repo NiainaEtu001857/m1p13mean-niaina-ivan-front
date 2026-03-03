@@ -37,7 +37,7 @@ export class AdminLayoutComponent {
     this.isDropdownOpen = !this.isDropdownOpen;
   }
 
-  // Fermer le dropdown si clic à l’extérieur
+  // Close dropdown on outside click
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent) {
     const target = event.target as HTMLElement;

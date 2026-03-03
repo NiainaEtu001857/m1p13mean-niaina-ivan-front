@@ -47,7 +47,7 @@ export class DashboardComponent {
   async loadStats() {
     const token = localStorage.getItem('token');
     if (!token) {
-      this.errorMessage = 'Vous devez vous connecter.';
+      this.errorMessage = 'You must be logged in.';
       this.cdr.markForCheck();
       return;
     }
@@ -67,7 +67,7 @@ export class DashboardComponent {
       this.isLoading = false;
       this.cdr.markForCheck();
     } catch (error: any){
-      this.errorMessage = error?.error?.message || error?.error?.error || 'Erreur chargement ';
+      this.errorMessage = error?.error?.message || error?.error?.error || 'Error loading data.';
       this.stats = {};
       this.isLoading = false;
       this.cdr.markForCheck();

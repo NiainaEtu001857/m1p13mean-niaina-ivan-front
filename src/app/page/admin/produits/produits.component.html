@@ -6,7 +6,7 @@
           <div class="row align-items-center">
             <div class="col">
               <h6 class="header-pretitle">Overview</h6>
-              <h1 class="header-title text-truncate">Listes des produits</h1>
+              <h1 class="header-title text-truncate">Product List</h1>
             </div>
           </div>
         </div>
@@ -22,7 +22,7 @@
                     <input
                       class="form-control list-search"
                       type="search"
-                      placeholder="Rechercher (boutique, ref, nom, type, description)"
+                      placeholder="Search (shop, ref, name, type, description)"
                       [value]="searchTerm"
                       (input)="onSearch($any($event.target).value)"
                     >
@@ -30,13 +30,6 @@
                       <i class="fe fe-search"></i>
                     </span>
                   </div>
-                </div>
-                <div class="col-auto">
-                  <select class="form-select form-select-sm" disabled>
-                    <option>10 / page</option>
-                    <option>20 / page</option>
-                    <option>50 / page</option>
-                  </select>
                 </div>
               </div>
             </div>
@@ -51,21 +44,21 @@
                         <label class="form-check-label" for="listCheckboxAll"></label>
                       </div>
                     </th>
-                    <th><a class="list-sort text-body-secondary" data-sort="item-shop" href="#">Boutique</a></th>
+                    <th><a class="list-sort text-body-secondary" data-sort="item-shop" href="#">Shop</a></th>
                     <th><a class="list-sort text-body-secondary" data-sort="item-ref" href="#">Ref</a></th>
-                    <th><a class="list-sort text-body-secondary" data-sort="item-name" href="#">Produit</a></th>
-                    <th><a class="list-sort text-body-secondary" data-sort="item-price" href="#">Prix</a></th>
+                    <th><a class="list-sort text-body-secondary" data-sort="item-name" href="#">Product</a></th>
+                    <th><a class="list-sort text-body-secondary" data-sort="item-price" href="#">Price</a></th>
                     <th><a class="list-sort text-body-secondary" data-sort="item-min" href="#">Min Qty</a></th>
                     <th><a class="list-sort text-body-secondary" data-sort="item-base" href="#">Base Unity</a></th>
-                    <th><a class="list-sort text-body-secondary" data-sort="item-attrs" href="#">Attributs</a></th>
+                    <th><a class="list-sort text-body-secondary" data-sort="item-attrs" href="#">Attributes</a></th>
                     <th><a class="list-sort text-body-secondary" data-sort="item-detail" href="#">Description</a></th>
                     <th><a class="list-sort text-body-secondary" data-sort="item-type" href="#">Type</a></th>
-                    <th class="text-end">Autre</th>
+                    <th class="text-end">Other</th>
                   </tr>
                 </thead>
                 <tbody class="list fs-base">
                   <tr *ngIf="isLoading">
-                    <td colspan="11" class="text-center py-4">Chargement des produits...</td>
+                    <td colspan="11" class="text-center py-4">Loading products...</td>
                   </tr>
 
                   <tr *ngIf="!isLoading && errorMessage">
@@ -73,7 +66,7 @@
                   </tr>
 
                   <tr *ngIf="!isLoading && !errorMessage && filteredServices.length === 0">
-                    <td colspan="11" class="text-center py-4">Aucun produit trouvé.</td>
+                    <td colspan="11" class="text-center py-4">No products found.</td>
                   </tr>
 
                   <tr *ngFor="let service of filteredServices; trackBy: trackByService">
@@ -86,7 +79,7 @@
                     <td><span class="item-shop text-reset">{{ getShopName(service) }}</span></td>
                     <td><span class="item-ref text-muted">{{ service.ref || '-' }}</span></td>
                     <td><span class="item-name text-reset">{{ service.name }}</span></td>
-                    <td><span class="item-price text-reset">{{ service.sale_price }} Ar</span></td>
+                    <td><span class="item-price text-reset">{{ service.sale_price }} €</span></td>
                     <td><span class="item-min text-reset">{{ service.min_quantity ?? '-' }}</span></td>
                     <td><span class="item-base text-reset">{{ service.base_unity || '-' }}</span></td>
                     <td><span class="item-attrs text-reset">{{ formatAttributes(service.attributes) }}</span></td>
@@ -98,9 +91,9 @@
                           <i class="fe fe-more-vertical"></i>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end">
-                          <a [routerLink]="['/admin/clients-detail']" class="dropdown-item">Detail</a>
-                          <a href="#!" class="dropdown-item">Suprimer</a>
-                          <a href="#!" class="dropdown-item">Inactif</a>
+                          <a [routerLink]="['/admin/clients-detail']" class="dropdown-item">Details</a>
+                          <a href="#!" class="dropdown-item">Delete</a>
+                          <a href="#!" class="dropdown-item">Inactive</a>
                         </div>
                       </div>
                     </td>
@@ -110,7 +103,7 @@
             </div>
             <div class="card-footer d-flex flex-wrap justify-content-between align-items-center gap-2">
               <div class="small text-muted">
-                Affichage {{ filteredServices.length }} sur {{ totalItems || filteredServices.length }}
+                Showing {{ filteredServices.length }} of {{ totalItems || filteredServices.length }}
               </div>
               <div class="btn-group btn-group-sm">
                 <button type="button" class="btn btn-outline-secondary" (click)="previousPage()" [disabled]="page <= 1 || isLoading">

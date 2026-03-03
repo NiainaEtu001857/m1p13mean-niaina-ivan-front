@@ -15,7 +15,7 @@
 
                     <!-- Title -->
                     <h1 class="header-title text-truncate">
-                      Listes des clients
+                      Client List
                     </h1>
 
                   </div>
@@ -54,7 +54,7 @@
                           <input
                             class="form-control list-search"
                             type="search"
-                            placeholder="Rechercher (id, nom, email)"
+                            placeholder="Search (id, name, email)"
                             [value]="searchTerm"
                             (input)="onSearch($any($event.target).value)"
                           >
@@ -62,13 +62,6 @@
                             <i class="fe fe-search"></i>
                           </span>
                         </div>
-                      </div>
-                      <div class="col-auto">
-                        <select class="form-select form-select-sm" disabled>
-                          <option>10 / page</option>
-                          <option>20 / page</option>
-                          <option>50 / page</option>
-                        </select>
                       </div>
                     </div>
                   </div>
@@ -89,7 +82,7 @@
                             <a class="list-sort text-body-secondary" data-sort="item-id" href="#">ID</a>
                           </th>
                           <th>
-                            <a class="list-sort text-body-secondary" data-sort="item-name" href="#">Nom</a>
+                            <a class="list-sort text-body-secondary" data-sort="item-name" href="#">Name</a>
                           </th>
                           <th>
                             <a class="list-sort text-body-secondary" data-sort="item-email" href="#">Email</a>
@@ -99,7 +92,7 @@
                       </thead>
                       <tbody class="list fs-base">
                         <tr *ngIf="isLoading">
-                          <td colspan="5" class="text-center py-4">Chargement des clients...</td>
+                          <td colspan="5" class="text-center py-4">Loading clients...</td>
                         </tr>
 
                         <tr *ngIf="!isLoading && errorMessage">
@@ -107,7 +100,7 @@
                         </tr>
 
                         <tr *ngIf="!isLoading && !errorMessage && filteredClients.length === 0">
-                          <td colspan="5" class="text-center py-4">Aucun client trouvé.</td>
+                          <td colspan="5" class="text-center py-4">No clients found.</td>
                         </tr>
 
                         <tr *ngFor="let client of filteredClients; trackBy: trackByClient">
@@ -133,7 +126,7 @@
                               (click)="deleteClient(client)"
                               [disabled]="isLoading || deletingClientId === (client._id || client.id)"
                             >
-                              {{ deletingClientId === (client._id || client.id) ? 'Suppression...' : 'Supprimer' }}
+                              {{ deletingClientId === (client._id || client.id) ? 'Deleting...' : 'Delete' }}
                             </button>
                           </td>
                         </tr>
@@ -142,7 +135,7 @@
                   </div>
                   <div class="card-footer d-flex flex-wrap justify-content-between align-items-center gap-2">
                     <div class="small text-muted">
-                      Affichage {{ filteredClients.length }} sur {{ totalItems || filteredClients.length }}
+                      Showing {{ filteredClients.length }} of {{ totalItems || filteredClients.length }}
                     </div>
                     <div class="btn-group btn-group-sm">
                       <button type="button" class="btn btn-outline-secondary" (click)="previousPage()" [disabled]="page <= 1 || isLoading">

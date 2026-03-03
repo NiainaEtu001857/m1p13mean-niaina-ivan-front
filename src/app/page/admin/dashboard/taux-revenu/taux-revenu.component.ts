@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import { BaseChartDirective } from 'ng2-charts';
 import { Chart, ChartData, ChartOptions, BarController, BarElement, CategoryScale, LinearScale, Title, Tooltip, Legend } from 'chart.js';
 
@@ -11,39 +11,34 @@ Chart.register(BarController, BarElement, CategoryScale, LinearScale, Title, Too
   styleUrl: './taux-revenu.component.css',
 })
 export class TauxRevenuComponent {
-  private defaultLabels: string[] = ['Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Jun', 'Jul', 'Aou', 'Sep', 'Oct', 'Nov', 'Dec'];
+  @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
+
+  private defaultLabels: string[] = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   private defaultRevenue: number[] = [1200, 1500, 1000, 1800, 1700, 2000, 2100, 1900, 2200, 2300, 2500, 2700];
+  private currentLabels: string[] = this.defaultLabels;
+  private currentRevenue: number[] = this.defaultRevenue;
 
   public barChartType: 'bar' = 'bar';
   private barColor = 'rgba(54, 162, 235, 0.8)';
 
-  public barChartData: ChartData<'bar'> = {
-    labels: this.defaultLabels,
-    datasets: [
-      {
-        data: this.defaultRevenue,
-        label: "Chiffre d'affaires mensuel (Ariary)",
-        backgroundColor: this.barColor,
-        borderRadius: 10,
-        barPercentage: 0.6,
-      }
-    ]
-  };
+  public barChartData: ChartData<'bar'> = this.buildChartData();
 
   @Input() set chartLabels(value: string[] | undefined) {
     if (Array.isArray(value) && value.length > 0) {
-      this.barChartData.labels = value;
+      this.currentLabels = value;
     } else {
-      this.barChartData.labels = this.defaultLabels;
+      this.currentLabels = this.defaultLabels;
     }
+    this.refreshChartData();
   }
 
   @Input() set monthlyRevenue(value: number[] | undefined) {
     if (Array.isArray(value) && value.length > 0) {
-      this.barChartData.datasets[0].data = value;
+      this.currentRevenue = value;
     } else {
-      this.barChartData.datasets[0].data = this.defaultRevenue;
+      this.currentRevenue = this.defaultRevenue;
     }
+    this.refreshChartData();
   }
 
   public barChartOptions: ChartOptions<'bar'> = {
@@ -57,4 +52,24 @@ export class TauxRevenuComponent {
       y: { beginAtZero: true }
     }
   };
+
+  private buildChartData(): ChartData<'bar'> {
+    return {
+      labels: this.currentLabels,
+      datasets: [
+        {
+          data: this.currentRevenue,
+          label: 'Monthly Revenue (EUR)',
+          backgroundColor: this.barColor,
+          borderRadius: 10,
+          barPercentage: 0.6,
+        }
+      ]
+    };
+  }
+
+  private refreshChartData(): void {
+    this.barChartData = this.buildChartData();
+    this.chart?.update();
+  }
 }

@@ -40,7 +40,7 @@ export class ClientComponent implements OnInit {
   async loadClients() {
     const token = localStorage.getItem('token');
     if (!token) {
-      this.errorMessage = 'Vous devez vous connecter.';
+      this.errorMessage = 'You must be logged in.';
       this.cdr.markForCheck();
       return;
     }
@@ -71,7 +71,7 @@ export class ClientComponent implements OnInit {
         this.totalPages = Math.max(Number(response?.totalPages) || 1, 1);
       }
     } catch (error: any) {
-      this.errorMessage = error?.error?.message || error?.error?.error || 'Erreur chargement clients';
+      this.errorMessage = error?.error?.message || error?.error?.error || 'Error loading clients';
       this.clients = [];
       this.totalPages = 0;
       this.totalItems = 0;
@@ -118,20 +118,20 @@ export class ClientComponent implements OnInit {
   async deleteClient(client: Client): Promise<void> {
     const clientId = client._id || (typeof client.id === 'string' ? client.id : '');
     if (!clientId) {
-      this.errorMessage = 'ID client manquant.';
+      this.errorMessage = 'Missing client ID.';
       this.cdr.markForCheck();
       return;
     }
 
-    const fullName = `${client.first_name || ''} ${client.last_name || ''}`.trim() || client.email || 'ce client';
-    const confirmed = window.confirm(`Supprimer ${fullName} ?`);
+    const fullName = `${client.first_name || ''} ${client.last_name || ''}`.trim() || client.email || 'this client';
+    const confirmed = window.confirm(`Delete ${fullName} ?`);
     if (!confirmed) {
       return;
     }
 
     const token = localStorage.getItem('token');
     if (!token) {
-      this.errorMessage = 'Vous devez vous connecter.';
+      this.errorMessage = 'You must be logged in.';
       this.cdr.markForCheck();
       return;
     }
@@ -154,7 +154,7 @@ export class ClientComponent implements OnInit {
 
       await this.loadClients();
     } catch (error: any) {
-      this.errorMessage = error?.error?.message || error?.error?.error || 'Erreur suppression client';
+      this.errorMessage = error?.error?.message || error?.error?.error || 'Error deleting client';
     } finally {
       this.deletingClientId = null;
       this.cdr.markForCheck();
