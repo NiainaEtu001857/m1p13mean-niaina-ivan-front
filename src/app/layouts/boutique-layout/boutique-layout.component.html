@@ -27,8 +27,6 @@
     
             <!-- Menu -->
             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="sidebarIcon">
-                <a href="./profile-posts.html" class="dropdown-item">Profile</a>
-                <a href="./account-general.html" class="dropdown-item">Settings</a>
                 <hr class="dropdown-divider">
                 <a href="./sign-in.html" class="dropdown-item">Logout</a>
             </div>
@@ -64,11 +62,6 @@
                 </a>
                 <div class="collapse " id="sidebarCommande">
                   <ul class="nav nav-sm flex-column">
-                    <li>
-                      <a [routerLink]="['/boutiques/commandes']" class="nav-link">
-                        Actifs
-                      </a>
-                    </li>
                     <li>
                       <a [routerLink]="['/boutiques/commandes/ajouter']" class="nav-link">
                         Ajouter
@@ -145,8 +138,8 @@
                     [class.show]="isDropdownOpen" 
                     style="position: absolute; bottom: 100%; left: 0;"
                   >
-                    <a href="./profile-posts.html" class="dropdown-item">Profile</a>
-                    <a href="./account-general.html" class="dropdown-item">Settings</a>
+                    <!-- <a href="./profile-posts.html" class="dropdown-item">Profile</a>
+                    <a href="./account-general.html" class="dropdown-item">Settings</a> -->
                     <hr class="dropdown-divider">
                     <button type="button" (click)="onLogout()" class="dropdown-item">Logout</button>
                   </div>
